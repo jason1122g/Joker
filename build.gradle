@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'jacoco'
+apply plugin: 'cobertura'
 apply plugin: 'com.github.kt3k.coveralls'
 
 description = "A GUI Library For Java"
@@ -13,8 +13,8 @@ buildscript {
     repositories {
         mavenCentral()
     }
-
     dependencies {
+        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // cobertura plugin
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:1.0.2'
     }
 }
@@ -27,13 +27,7 @@ repositories {
 dependencies {
     groovy      "org.codehaus.groovy:groovy-all:2.1.5"
     testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
-//    testRuntime "cglib:cglib-nodep:2.2.2"        // allows mocking of classes (in addition to interfaces)
-//    testRuntime "org.objenesis:objenesis:1.2"    // allows mocking of classes without default constructor (together with CGLIB)
 }
 
-jacocoTestReport {
-    reports {
-        xml.enabled  = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
+cobertura.coverageSourceDirs = sourceSets.main.groovy.srcDirs
+cobertura.coverageFormats    = ['html', 'xml'] // coveralls plugin depends on xml format report

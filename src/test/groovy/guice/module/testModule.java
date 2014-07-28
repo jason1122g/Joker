@@ -2,6 +2,8 @@ package guice.module;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import guice.provider.FrameFixtureProvider;
+import org.fest.swing.fixture.FrameFixture;
 
 import javax.swing.*;
 
@@ -9,7 +11,7 @@ public class testModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
+        bind(FrameFixture.class).toProvider(FrameFixtureProvider.class);
     }
 
     @Provides

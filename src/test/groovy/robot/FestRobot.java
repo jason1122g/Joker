@@ -1,19 +1,21 @@
-package fest;
+package robot;
 
 import org.fest.swing.core.*;
 import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.hierarchy.ComponentHierarchy;
+import robot.abstracts.Path;
+import robot.handler.DragPath;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomRobot implements Robot{
+public class FestRobot implements Robot{
 
     private FrameFixture window;
     private Robot robot;
 
-    public CustomRobot(FrameFixture window){
+    public FestRobot(FrameFixture window){
         this.window = window;
         this.robot  = window.robot;
     }
@@ -271,6 +273,10 @@ public class CustomRobot implements Robot{
     @Override
     public boolean isActive() {
         return robot.isActive();
+    }
+
+    public Path drag(){
+        return new DragPath(this);
     }
 
     public Component findComponentAt(int x, int y){

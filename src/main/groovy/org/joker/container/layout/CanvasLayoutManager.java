@@ -4,9 +4,6 @@ import org.joker.container.JokerLayer;
 
 import java.awt.*;
 
-/**
- * TODO TEST AND FINISH THIS
- */
 public class CanvasLayoutManager implements LayoutManager {
 
     @Override

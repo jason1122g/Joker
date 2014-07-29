@@ -50,4 +50,12 @@ class CanvasLayoutManagerTest extends Specification {
             label.getSize() != container.getSize()
     }
 
+    def"addLayoutComponent and removeLayoutComponent will do nothing"(){
+        when:
+            layoutManager.addLayoutComponent(null,null)
+            layoutManager.removeLayoutComponent(null)
+        then: "nothing happened"
+            true
+    }
+
 }

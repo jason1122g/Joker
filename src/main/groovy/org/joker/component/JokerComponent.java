@@ -3,54 +3,37 @@ package org.joker.component;
 import org.joker.JokerObject;
 import org.joker.component.abstracts.Draggable;
 import org.joker.component.abstracts.Resizable;
-
-import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
+import org.joker.component.event.ClickThroughEvent;
 
 /**
  * TODO TEST AND FINISH THIS
  */
 public class JokerComponent extends JokerObject implements Draggable,Resizable {
-    private MouseMotionListener mouseMotionListener;
+
+    private boolean isDraggable;
+    private boolean isResizable;
+
+    public JokerComponent(){
+        this.addMouseListener(new ClickThroughEvent().through(this));
+    }
+
+    @Override
+    public boolean isResizable() {
+        return isResizable;
+    }
+
+    @Override
+    public void setResizable(boolean isResizable) {
+        this.isResizable = isResizable;
+    }
+
+    @Override
+    public boolean isDraggable() {
+        return isDraggable;
+    }
 
     @Override
     public void setDraggable(boolean isDraggable){
-        if(isDraggable){
-            if(mouseMotionListener == null){
-                initMouseMotionListener();
-            }
-            this.addMouseMotionListener(mouseMotionListener);
-        }else{
-            this.removeMouseMotionListener(mouseMotionListener);
-        }
-    }
-
-    private void initMouseMotionListener() {
-        mouseMotionListener = new MouseMotionAdapter(){
-
-            private Point anchorPoint;
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-                anchorPoint = e.getPoint();
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                int anchorX = anchorPoint.x;
-                int anchorY = anchorPoint.y;
-
-                Point parentOnScreen = getParent().getLocationOnScreen();
-                Point mouseOnScreen  = e.getLocationOnScreen();
-
-                int nextX = mouseOnScreen.x - parentOnScreen.x - anchorX;
-                int nextY = mouseOnScreen.y - parentOnScreen.y - anchorY;
-
-                setLocation(new Point(nextX,nextY));
-            }
-
-        };
+        this.isDraggable = isDraggable;
     }
 }

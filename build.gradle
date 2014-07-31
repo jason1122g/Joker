@@ -32,7 +32,7 @@ dependencies {
 
     testCompile 'org.easytesting:fest-swing:1.2.1'
 
-    compile 'com.google.inject:guice:3.0'
+    testCompile 'com.google.inject:guice:3.0'
 }
 
 cobertura.coverageSourceDirs = sourceSets.main.groovy.srcDirs

@@ -13,11 +13,11 @@ import java.awt.*
 
 class DragEventTest extends Specification {
 
-    @Shared Injector injector = Guice.createInjector(new TestModule())
+    @Shared Injector injector = Guice.createInjector( new TestModule() )
     @Shared FrameFixture window
 
     def setup(){
-        window = injector.getInstance(FrameFixture.class)
+        window = injector.getInstance( FrameFixture.class )
         window.show()
     }
 
@@ -28,35 +28,35 @@ class DragEventTest extends Specification {
     def "test drag use with"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragEvent().with(component)
-            component.addMouseMotionListener(dragEvent)
-            component.setName("dragEventComponent")
-            component.setBounds(0,0,50,50)
+            def dragEvent = new DragEvent().with( component )
+            component.addMouseMotionListener( dragEvent )
+            component.setName( "dragEventComponent" )
+            component.setBounds( 0, 0, 50, 50 )
         and:
-            window.component().setSize(300,300)
-            window.component().add(component)
+            window.component().setSize( 300, 300 )
+            window.component().add( component )
         and:
-            def robot = new FestRobot(window)
+            def robot = new FestRobot( window )
         when:
-            robot.drag().from(new Point(25,25)).to(new Point(125,125))
+            robot.drag().from( new Point( 25, 25 ) ).to( new Point( 125, 125 ) )
         then:
-            robot.findComponentAt(125,125).getName() == "dragEventComponent"
+            robot.findComponentAt( 125, 125 ).getName() == "dragEventComponent"
     }
 
     def "get active components1"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragEvent().with(component)
+            def dragEvent = new DragEvent().with( component )
         expect:
-            dragEvent.components().contains(component)
+            dragEvent.components().contains( component )
     }
 
     def "get active components2"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragEvent().with(component).without(component)
+            def dragEvent = new DragEvent().with( component ).without( component )
         expect:
-            !dragEvent.components().contains(component)
+            !dragEvent.components().contains( component )
     }
 
 

@@ -8,7 +8,7 @@ class JokerComponentTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.setDraggable(true)
+            component.setDraggable( true )
         then:
             component.isDraggable()
     }
@@ -17,7 +17,7 @@ class JokerComponentTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.setDraggable(false)
+            component.setDraggable( false )
         then:
             !component.isDraggable()
     }
@@ -26,7 +26,7 @@ class JokerComponentTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.setResizable(true)
+            component.setResizable( true )
         then:
             component.isResizable()
     }
@@ -35,7 +35,7 @@ class JokerComponentTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.setResizable(false)
+            component.setResizable( false )
         then:
             !component.isResizable()
     }
@@ -44,7 +44,7 @@ class JokerComponentTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.setSelectable(true)
+            component.setSelectable( true )
         then:
             component.isSelectable()
     }
@@ -53,7 +53,7 @@ class JokerComponentTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.setSelectable(false)
+            component.setSelectable( false )
         then:
             !component.isSelectable()
     }

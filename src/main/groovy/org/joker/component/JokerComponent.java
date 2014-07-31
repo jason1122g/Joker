@@ -17,7 +17,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     private boolean isSelected;
 
     public JokerComponent(){
-        this.addMouseListener(new SelectEvent().from(this));
+        this.addMouseListener( new SelectEvent().from( this ) );
     }
 
     @Override
@@ -26,7 +26,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     }
 
     @Override
-    public void setResizable(boolean isResizable) {
+    public void setResizable( boolean isResizable ) {
         this.isResizable = isResizable;
     }
 
@@ -36,7 +36,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     }
 
     @Override
-    public void setDraggable(boolean isDraggable){
+    public void setDraggable( boolean isDraggable ){
         this.isDraggable = isDraggable;
     }
 
@@ -63,7 +63,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     }
 
     @Override
-    public void setSelectable(boolean isSelectable) {
+    public void setSelectable( boolean isSelectable ) {
         this.isSelectable = isSelectable;
     }
 

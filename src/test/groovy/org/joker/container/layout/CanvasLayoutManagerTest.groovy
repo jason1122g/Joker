@@ -15,21 +15,21 @@ class CanvasLayoutManagerTest extends Specification {
         given:
             def container = new JPanel()
         expect:
-            layoutManager.preferredLayoutSize(container) == getPrefferedSize(container)
+            layoutManager.preferredLayoutSize( container ) == getPrefferedSize( container )
     }
 
     def "getMinimumSize from container is equals to PrefferedSize"(){
         given:
             def container = new JPanel()
         expect:
-            layoutManager.minimumLayoutSize(container) == layoutManager.preferredLayoutSize(container)
+            layoutManager.minimumLayoutSize( container ) == layoutManager.preferredLayoutSize( container )
     }
 
-    private static Dimension getPrefferedSize(Container container){
+    private static Dimension getPrefferedSize( Container container ){
         Insets    insets    = container.getInsets();
         Dimension dimension = new Dimension();
-        dimension.width  = container.getWidth() + insets.left + insets.right;
-        dimension.height = container.getHeight()+ insets.top  + insets.bottom;
+        dimension.width  = container.getWidth()  + insets.left + insets.right;
+        dimension.height = container.getHeight() + insets.top  + insets.bottom;
         return dimension;
     }
 
@@ -40,11 +40,11 @@ class CanvasLayoutManagerTest extends Specification {
             def layer = new JokerLayer()
             def label = new JLabel()
         when:
-            container.add(layer)
-            container.add(label)
-            container.setSize(300,300)
+            container.add( layer )
+            container.add( label )
+            container.setSize( 300, 300 )
         and:
-            layoutManager.layoutContainer(container)
+            layoutManager.layoutContainer( container )
         then:
             layer.getSize() == container.getSize()
             label.getSize() != container.getSize()
@@ -52,8 +52,8 @@ class CanvasLayoutManagerTest extends Specification {
 
     def"addLayoutComponent and removeLayoutComponent will do nothing"(){
         when:
-            layoutManager.addLayoutComponent(null,null)
-            layoutManager.removeLayoutComponent(null)
+            layoutManager.addLayoutComponent( null, null )
+            layoutManager.removeLayoutComponent( null )
         then: "nothing happened"
             true
     }

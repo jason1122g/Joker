@@ -13,20 +13,20 @@ public class FrameFixtureProvider implements Provider<FrameFixture> {
     @Override
     public FrameFixture get() {
 
-        JFrame resultFrame = GuiActionRunner.execute(new GuiQuery<JFrame>() {
+        JFrame resultFrame = GuiActionRunner.execute( new GuiQuery<JFrame>() {
             protected JFrame executeInEDT() {
                 return  initFrame ();
             }
         });
 
-        return new FrameFixture(resultFrame);
+        return new FrameFixture( resultFrame );
     }
 
     private JFrame initFrame(){
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-        frame.setSize(300, 300);
+        frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
+        frame.setLayout( new BorderLayout() );
+        frame.setSize( 300, 300 );
         return frame;
     }
 }

@@ -14,11 +14,11 @@ public class JokerCanvasProvider implements Provider<JokerCanvas> {
 
     @Override
     public JokerCanvas get() {
-        return GuiActionRunner.execute(new GuiQuery<JokerCanvas>() {
+        return GuiActionRunner.execute( new GuiQuery<JokerCanvas>() {
             protected JokerCanvas executeInEDT() {
                 JokerCanvas canvas = initCanvas();
-                JokerLayer  layer  = initLayer(canvas);
-                initComponent(layer);
+                JokerLayer  layer  = initLayer( canvas );
+                initComponent( layer );
                 return canvas;
             }
         });
@@ -26,31 +26,31 @@ public class JokerCanvasProvider implements Provider<JokerCanvas> {
 
     private JokerCanvas initCanvas() {
         JokerCanvas canvas = new JokerCanvas();
-        canvas.setSize(250, 250);
-        canvas.setName("jokerCanvas");
+        canvas.setSize( 250, 250 );
+        canvas.setName( "jokerCanvas" );
         return canvas;
     }
 
-    private JokerLayer initLayer(JComponent component) {
+    private JokerLayer initLayer( JComponent component ) {
         JokerLayer layer = new JokerLayer(){
-            public void paintComponent(Graphics g){
-                g.drawRect(1,1,this.getWidth()-3,this.getHeight()-3);
+            public void paintComponent( Graphics g ){
+                g.drawRect( 1, 1, this.getWidth()-3, this.getHeight()-3 );
             }
         };
-        layer.setName("jokerLayer");
-        component.add(layer);
+        layer.setName( "jokerLayer" );
+        component.add( layer );
         return layer;
     }
 
-    private void initComponent(JComponent component){
+    private void initComponent( JComponent component ){
         JokerComponent jokerComponent = new JokerComponent(){
-            public void paintComponent(Graphics g){
-                g.drawRect(3,3,this.getWidth()-4,this.getHeight()-4);
+            public void paintComponent( Graphics g ){
+                g.drawRect( 3, 3, this.getWidth()-4, this.getHeight()-4 );
             }
         };
-        jokerComponent.setName("jokerComponent1");
-        jokerComponent.setBounds(10, 10, 50, 50);
-        jokerComponent.setDraggable(true);
-        component.add(jokerComponent);
+        jokerComponent.setName( "jokerComponent1" );
+        jokerComponent.setBounds( 10, 10, 50, 50 );
+        jokerComponent.setDraggable( true );
+        component.add( jokerComponent );
     }
 }

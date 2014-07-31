@@ -7,13 +7,13 @@ import java.awt.*;
 public class CanvasLayoutManager implements LayoutManager {
 
     @Override
-    public void addLayoutComponent(String name, Component comp) {}
+    public void addLayoutComponent( String name, Component comp ) {}
 
     @Override
-    public void removeLayoutComponent(Component comp) {}
+    public void removeLayoutComponent( Component comp ) {}
 
     @Override
-    public Dimension preferredLayoutSize(Container parent) {
+    public Dimension preferredLayoutSize( Container parent ) {
         Insets    insets    = parent.getInsets();
         Dimension dimension = new Dimension();
         dimension.width  = parent.getWidth() + insets.left + insets.right;
@@ -22,15 +22,15 @@ public class CanvasLayoutManager implements LayoutManager {
     }
 
     @Override
-    public Dimension minimumLayoutSize(Container parent) {
-        return preferredLayoutSize(parent);
+    public Dimension minimumLayoutSize( Container parent ) {
+        return preferredLayoutSize( parent );
     }
 
     @Override
-    public void layoutContainer(Container parent) {
-        for(Component component: parent.getComponents()){
-            if(component instanceof JokerLayer){
-                component.setBounds(0,0,parent.getWidth(),parent.getHeight());
+    public void layoutContainer( Container parent ) {
+        for( Component component: parent.getComponents() ){
+            if( component instanceof JokerLayer ){
+                component.setBounds( 0, 0, parent.getWidth(), parent.getHeight() );
             }
         }
     }

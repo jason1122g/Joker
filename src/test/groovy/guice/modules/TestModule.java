@@ -13,24 +13,24 @@ public class TestModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(FrameFixture.class).toProvider(FrameFixtureProvider.class);
-        bind(JokerCanvas.class).toProvider(JokerCanvasProvider.class);
+        bind( FrameFixture.class ).toProvider( FrameFixtureProvider.class );
+        bind( JokerCanvas.class ) .toProvider( JokerCanvasProvider.class );
     }
 
     @Provides
     JFrame provideJFrame(){
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(300,300);
-        frame.setLayout(null);
+        frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
+        frame.setSize( 300, 300 );
+        frame.setLayout( null );
         return frame;
     }
 
     @Provides
     JPanel provideJPanel(){
         JPanel panel = new JPanel();
-        panel.setSize(300,300);
-        panel.setLayout(null);
+        panel.setSize( 300, 300 );
+        panel.setLayout( null );
         return panel;
     }
 }

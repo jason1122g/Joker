@@ -16,15 +16,15 @@ class SelectEventTest extends Specification {
             def component = new JokerComponent()
             def container = new JokerLayer(){
                 @Override
-                void notify(JokerComponent selectedComponent) {
+                void notify( JokerComponent selectedComponent ) {
                     eventSource = selectedComponent
                 }
             }
         and:
-            container.add(component)
-            component.addMouseListener( new SelectEvent().from(component) )
+            container.add( component )
+            component.addMouseListener( new SelectEvent().from( component ) )
         and:
-            def simulator = new EventSimulator(component)
+            def simulator = new EventSimulator( component )
         when:
             simulator.click()
         then:
@@ -36,30 +36,30 @@ class SelectEventTest extends Specification {
             def component = new JokerComponent()
             def container = new JPanel()
         and:
-            container.add(component)
-            component.addMouseListener( new SelectEvent().from(component) )
+            container.add( component )
+            component.addMouseListener( new SelectEvent().from( component ) )
         when:
-            new EventSimulator(component).click()
+            new EventSimulator( component ).click()
         then:
-            thrown(IllegalContainerException)
+            thrown( IllegalContainerException )
     }
 
     def "throws exception when no parent exist"(){
         given:
             def component = new JokerComponent()
-            component.addMouseListener( new SelectEvent().from(component) )
+            component.addMouseListener( new SelectEvent().from( component ) )
         when:
-            new EventSimulator(component).click()
+            new EventSimulator( component ).click()
         then:
-            thrown(IllegalContainerException)
+            thrown( IllegalContainerException )
     }
 
     def "not thrown exception even wrong container before event trigger"(){
         given:
             def component = new JokerComponent()
         when:
-            component.addMouseListener( new SelectEvent().from(component) )
+            component.addMouseListener( new SelectEvent().from( component ) )
         then:
-            notThrown(IllegalContainerException)
+            notThrown( IllegalContainerException )
     }
 }

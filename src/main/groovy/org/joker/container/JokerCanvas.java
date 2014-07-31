@@ -11,7 +11,7 @@ import org.joker.container.layout.CanvasLayoutManager;
 public class JokerCanvas extends JokerObject {
 
     public JokerCanvas(){
-        this.setLayout(new CanvasLayoutManager());
+        this.setLayout( new CanvasLayoutManager() );
     }
 
 }

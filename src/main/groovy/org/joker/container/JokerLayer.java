@@ -17,18 +17,18 @@ public class JokerLayer extends JokerObject implements SelectObserver{
     private SelectGroup selectGroup = new JokerGroup();
 
     public JokerLayer(){
-        this.setLayout(null);
-        this.addMouseListener(new MouseAdapter() {
+        this.setLayout( null );
+        this.addMouseListener( new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mouseClicked( MouseEvent e ) {
                 selectGroup.unselectAll();
             }
         });
     }
 
     @Override
-    public void notify(JokerComponent selectedComponent) {
-        selectGroup.select(selectedComponent);
+    public void notify( JokerComponent selectedComponent ) {
+        selectGroup.select( selectedComponent );
     }
 
 }

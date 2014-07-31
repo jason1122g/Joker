@@ -17,7 +17,7 @@ public class JokerCanvasProvider implements Provider<JokerCanvas> {
         return GuiActionRunner.execute(new GuiQuery<JokerCanvas>() {
             protected JokerCanvas executeInEDT() {
                 JokerCanvas canvas = initCanvas();
-                JokerLayer layer = initLayer(canvas);
+                JokerLayer  layer  = initLayer(canvas);
                 initComponent(layer);
                 return canvas;
             }

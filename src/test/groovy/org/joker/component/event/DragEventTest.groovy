@@ -4,11 +4,11 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import guice.modules.TestModule
 import org.fest.swing.fixture.FrameFixture
+import org.joker.component.JokerComponent
 import robot.FestRobot
 import spock.lang.Shared
 import spock.lang.Specification
 
-import javax.swing.*
 import java.awt.*
 
 class DragEventTest extends Specification {
@@ -25,12 +25,14 @@ class DragEventTest extends Specification {
         window.cleanUp()
     }
 
-    def "test drag"(){
+    def "test drag use with"(){
         given:
-            def component = new JLabel()
-            component.addMouseMotionListener(new DragEvent().with(component))
+            def component = new JokerComponent()
+            def dragEvent = new DragEvent().with(component)
+            component.addMouseMotionListener(dragEvent)
             component.setName("dragEventComponent")
             component.setBounds(0,0,50,50)
+        and:
             window.component().setSize(300,300)
             window.component().add(component)
         and:
@@ -40,4 +42,22 @@ class DragEventTest extends Specification {
         then:
             robot.findComponentAt(125,125).getName() == "dragEventComponent"
     }
+
+    def "get active components1"(){
+        given:
+            def component = new JokerComponent()
+            def dragEvent = new DragEvent().with(component)
+        expect:
+            dragEvent.components().contains(component)
+    }
+
+    def "get active components2"(){
+        given:
+            def component = new JokerComponent()
+            def dragEvent = new DragEvent().with(component).without(component)
+        expect:
+            !dragEvent.components().contains(component)
+    }
+
+
 }

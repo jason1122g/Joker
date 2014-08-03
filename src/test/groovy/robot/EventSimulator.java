@@ -2,11 +2,13 @@ package robot;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 public class EventSimulator {
 
     private JComponent component;
+    private int modifier = 0;
 
     public EventSimulator( JComponent eventTarget ){
         this.component = eventTarget;
@@ -83,7 +85,29 @@ public class EventSimulator {
         mouseRelease( eventSource, where, 1 );
     }
 
+    public void pressKey(int keyCode){
+        switch ( keyCode ){
+            case KeyEvent.VK_CONTROL:
+                modifier |= MouseEvent.CTRL_DOWN_MASK;
+                break;
+            case KeyEvent.VK_SHIFT:
+                modifier |= MouseEvent.SHIFT_DOWN_MASK;
+                break;
+        }
+    }
+
+    public void releaseKey(int keyCode){
+        switch ( keyCode ){
+            case KeyEvent.VK_CONTROL:
+                modifier ^= MouseEvent.CTRL_DOWN_MASK;
+                break;
+            case KeyEvent.VK_SHIFT:
+                modifier ^= MouseEvent.SHIFT_DOWN_MASK;
+                break;
+        }
+    }
+
     private void dispatch( JComponent component, int key, Point where, int times ){
-        component.dispatchEvent( new MouseEvent( component, key, System.currentTimeMillis(), 0, where.x, where.y, times, false) );
+        component.dispatchEvent( new MouseEvent( component, key, System.currentTimeMillis(), modifier, where.x, where.y, times, false) );
     }
 }

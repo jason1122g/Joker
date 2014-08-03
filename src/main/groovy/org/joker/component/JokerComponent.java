@@ -4,7 +4,7 @@ import org.joker.JokerObject;
 import org.joker.component.abstracts.Draggable;
 import org.joker.component.abstracts.Resizable;
 import org.joker.component.abstracts.Selectable;
-import org.joker.component.event.SelectEvent;
+import org.joker.component.listener.SelectListener;
 
 /**
  * TODO TEST AND FINISH THIS
@@ -17,7 +17,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     private boolean isSelected;
 
     public JokerComponent(){
-        this.addMouseListener( new SelectEvent().from( this ) );
+        this.addMouseListener( new SelectListener().triggerFrom(this) );
     }
 
     @Override

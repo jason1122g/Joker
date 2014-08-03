@@ -1,4 +1,4 @@
-package org.joker.component.event;
+package org.joker.component.listener;
 
 import org.joker.component.JokerComponent;
 
@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.util.*;
 
-public class DragEvent implements MouseMotionListener{
+public class DragListener implements MouseMotionListener{
 
     private Set<JokerComponent>       components         = new HashSet<JokerComponent>();
     private Map<JokerComponent,Point> beforeDragPointMap = new HashMap<JokerComponent, Point>();
@@ -15,12 +15,12 @@ public class DragEvent implements MouseMotionListener{
     private Point beforeDragPoint;
     private boolean isFirstDrag;
 
-    public DragEvent with( JokerComponent...components ){
+    public DragListener with( JokerComponent...components ){
         Collections.addAll( this.components,components );
         return this;
     }
 
-    public DragEvent without( JokerComponent...components ){
+    public DragListener without( JokerComponent...components ){
         for( JokerComponent component : components ){
             this.components.remove( component );
         }
@@ -62,11 +62,13 @@ public class DragEvent implements MouseMotionListener{
 
     private void setNextLocationOfAll( MouseEvent e ){
         Point nextRelativePoint = getNextRelativePoint(e);
-        for( JokerComponent component : components ){
-            Point originPos = beforeDragPointMap.get( component );
-            int   nextX     = originPos.x + nextRelativePoint.x;
-            int   nextY     = originPos.y + nextRelativePoint.y;
-            component.setLocation( nextX, nextY );
+        if ( lengthOf( nextRelativePoint ) > 3 ){
+            for( JokerComponent component : components ){
+                Point originPos = beforeDragPointMap.get( component );
+                int   nextX     = originPos.x + nextRelativePoint.x;
+                int   nextY     = originPos.y + nextRelativePoint.y;
+                component.setLocation( nextX, nextY );
+            }
         }
     }
 
@@ -80,6 +82,12 @@ public class DragEvent implements MouseMotionListener{
 
         return new Point( nextX, nextY );
 
+    }
+
+    private double lengthOf(Point point){
+        double x2 = point.x * point.x;
+        double y2 = point.y * point.y;
+        return Math.sqrt( x2 + y2 );
     }
 
 }

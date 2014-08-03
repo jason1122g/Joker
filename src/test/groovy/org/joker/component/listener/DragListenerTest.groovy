@@ -1,4 +1,4 @@
-package org.joker.component.event
+package org.joker.component.listener
 
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -11,7 +11,7 @@ import spock.lang.Specification
 
 import java.awt.*
 
-class DragEventTest extends Specification {
+class DragListenerTest extends Specification {
 
     @Shared Injector injector = Guice.createInjector( new TestModule() )
     @Shared FrameFixture window
@@ -25,10 +25,10 @@ class DragEventTest extends Specification {
         window.cleanUp()
     }
 
-    def "test drag use with"(){
+    def "test drag use with, drag distance must > 3"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragEvent().with( component )
+            def dragEvent = new DragListener().with( component )
             component.addMouseMotionListener( dragEvent )
             component.setName( "dragEventComponent" )
             component.setBounds( 0, 0, 50, 50 )
@@ -46,7 +46,7 @@ class DragEventTest extends Specification {
     def "get active components1"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragEvent().with( component )
+            def dragEvent = new DragListener().with( component )
         expect:
             dragEvent.components().contains( component )
     }
@@ -54,7 +54,7 @@ class DragEventTest extends Specification {
     def "get active components2"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragEvent().with( component ).without( component )
+            def dragEvent = new DragListener().with( component ).without( component )
         expect:
             !dragEvent.components().contains( component )
     }

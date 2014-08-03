@@ -1,39 +1,25 @@
 package org.joker.component.event;
 
 import org.joker.component.JokerComponent;
-import org.joker.container.abstracts.SelectObserver;
-import org.joker.exceptions.IllegalContainerException;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SelectEvent extends MouseAdapter {
+public class SelectEvent {
 
-    private SelectObserver selectObserver;
     private JokerComponent component;
+    private MouseEvent     mouseEvent;
 
-    public SelectEvent from( JokerComponent component ){
-        this.component = component;
-        return this;
+    public SelectEvent( JokerComponent component, MouseEvent mouseEvent ) {
+        this.component  = component;
+        this.mouseEvent = mouseEvent;
     }
 
-    private void initObserver(){
-        if( component.getParent() == null ){
-            throw new IllegalContainerException( "must have a container" );
-        }
-        try{
-            selectObserver = (SelectObserver) component.getParent();
-        }catch ( ClassCastException e ){
-            throw new IllegalContainerException( "container must be JokerLayer/SelectObserver" );
-        }
+    public JokerComponent getSource(){
+        return component;
     }
 
-    @Override
-    public void mouseClicked( MouseEvent e ) {
-        if(selectObserver == null){
-            initObserver();
-        }
-        selectObserver.notify( component );
+    public MouseEvent     getMouseEvent(){
+        return mouseEvent;
     }
 
 }

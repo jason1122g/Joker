@@ -4,7 +4,7 @@ import org.joker.component.JokerComponent;
 
 import java.awt.event.MouseEvent;
 
-public class SelectEvent {
+public class SelectEvent  {
 
     private JokerComponent component;
     private MouseEvent     mouseEvent;

@@ -1,4 +1,3 @@
-
 import org.joker.component.JokerComponent;
 import org.joker.container.JokerCanvas;
 import org.joker.container.JokerLayer;
@@ -25,8 +24,11 @@ public class TestLauncher {
                     g.setColor(color);
                     g.drawRect(3,3,this.getWidth()-4,this.getHeight()-4);
                     g.drawString(number+"",10,10);
-                    if(isSelected()){
-                        g.drawRect(getWidth()/2-10,getHeight()/2-10,20,20);
+                    if( isSelected() ){
+                        g.fillRect( getWidth()/2-3,-6,6,12 );
+                        g.fillRect( getWidth()/2-3,getHeight()-6,6,12 );
+                        g.fillRect( -6,getHeight()/2-3,12,6 );
+                        g.fillRect( getWidth()-6,getHeight()/2-3,12,6 );
                     }
                 }
             };

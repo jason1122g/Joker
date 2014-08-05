@@ -3,61 +3,47 @@ package org.joker.component.listener
 import com.google.inject.Guice
 import com.google.inject.Injector
 import guice.modules.TestModule
-import org.fest.swing.fixture.FrameFixture
 import org.joker.component.JokerComponent
-import robot.FestRobot
+import robot.EventSimulator
 import spock.lang.Shared
 import spock.lang.Specification
 
+import javax.swing.*
 import java.awt.*
 
 class DragListenerTest extends Specification {
 
     @Shared Injector injector = Guice.createInjector( new TestModule() )
-    @Shared FrameFixture window
+    @Shared JFrame frame
 
     def setup(){
-        window = injector.getInstance( FrameFixture.class )
-        window.show()
+        frame = injector.getInstance( JFrame.class )
+        frame.setVisible( true )
     }
 
     def cleanup(){
-        window.cleanUp()
+        frame.dispose()
     }
 
-    def "test drag use with, drag distance must > 3"(){
+    def "inject draggable component into drag listener group using with(), drag distance must > 3px"(){
         given:
-            def component = new JokerComponent()
+            def component = new JokerComponent(){
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g)
+                    g.drawRect(1,1,getWidth()-3,getHeight()-3)
+                }
+            }
             def dragEvent = new DragListener().with( component )
+        and:
             component.addMouseMotionListener( dragEvent )
-            component.setName( "dragEventComponent" )
             component.setBounds( 0, 0, 50, 50 )
         and:
-            window.component().setSize( 300, 300 )
-            window.component().add( component )
-        and:
-            def robot = new FestRobot( window )
+            frame.add( component )
         when:
-            robot.drag().from( new Point( 25, 25 ) ).to( new Point( 125, 125 ) )
+            new EventSimulator(component).drag().from( new Point(25,25) ).to( new Point(125,125) )
         then:
-            robot.findComponentAt( 125, 125 ).getName() == "dragEventComponent"
+            component.getLocation() == new Point( 100, 100 )
     }
-
-    def "get active components1"(){
-        given:
-            def component = new JokerComponent()
-            def dragEvent = new DragListener().with( component )
-        expect:
-            dragEvent.components().contains( component )
-    }
-
-    def "get active components2"(){
-        given:
-            def component = new JokerComponent()
-            def dragEvent = new DragListener().with( component ).without( component )
-        expect:
-            !dragEvent.components().contains( component )
-    }
-
 
 }

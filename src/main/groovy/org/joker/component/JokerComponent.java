@@ -4,11 +4,9 @@ import org.joker.JokerObject;
 import org.joker.component.abstracts.Draggable;
 import org.joker.component.abstracts.Resizable;
 import org.joker.component.abstracts.Selectable;
-import org.joker.component.listener.SelectListener;
+import org.joker.component.listener.DragListener;
 
-/**
- * TODO TEST AND FINISH THIS
- */
+
 public class JokerComponent extends JokerObject implements Draggable,Resizable,Selectable {
 
     private boolean isDraggable;
@@ -16,9 +14,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     private boolean isSelectable;
     private boolean isSelected;
 
-    public JokerComponent(){
-        this.addMouseListener( new SelectListener().triggerFrom(this) );
-    }
+    private DragListener dragListener = new DragListener().with( this );
 
     @Override
     public boolean isResizable() {
@@ -37,6 +33,11 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
 
     @Override
     public void setDraggable( boolean isDraggable ){
+        if( isDraggable ){
+            this.addMouseMotionListener( dragListener );
+        }else{
+            this.removeMouseMotionListener( dragListener );
+        }
         this.isDraggable = isDraggable;
     }
 

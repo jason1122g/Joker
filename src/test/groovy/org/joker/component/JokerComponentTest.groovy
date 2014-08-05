@@ -1,66 +1,40 @@
 package org.joker.component
 
+import spock.lang.Shared
 import spock.lang.Specification
 
 class JokerComponentTest extends Specification {
 
-    def "get/set draggable 1"(){
-        given:
-            def component = new JokerComponent()
+    @Shared def component = new JokerComponent()
+
+    def "the value of setDraggable() can be get from isDraggable()"(){
         when:
-            component.setDraggable( true )
+            component.setDraggable( flag )
         then:
-            component.isDraggable()
+            component.isDraggable() == flag
+        where:
+            flag << [ true, false ]
     }
 
-    def "get/set draggable 2"(){
-        given:
-            def component = new JokerComponent()
+    def "the value of setResizable() can be get from isResizable()"(){
         when:
-            component.setDraggable( false )
+            component.setResizable( flag )
         then:
-            !component.isDraggable()
+            component.isResizable() == flag
+        where:
+            flag << [ true, false ]
     }
 
-    def "get/set resizable 1"(){
-        given:
-            def component = new JokerComponent()
+    def "the value of setSelectable() can be get from isSelectable()"(){
         when:
-            component.setResizable( true )
+            component.setSelectable( flag )
         then:
-            component.isResizable()
+            component.isSelectable() == flag
+        where:
+            flag << [ true, false ]
     }
 
-    def "get/set resizable 2"(){
-        given:
-            def component = new JokerComponent()
-        when:
-            component.setResizable( false )
-        then:
-            !component.isResizable()
-    }
-
-    def "get/set selectable 1"(){
-        given:
-            def component = new JokerComponent()
-        when:
-            component.setSelectable( true )
-        then:
-            component.isSelectable()
-    }
-
-    def "get/set selectable 2"(){
-        given:
-            def component = new JokerComponent()
-        when:
-            component.setSelectable( false )
-        then:
-            !component.isSelectable()
-    }
-
-    def "get/set selected"(){
-        given:
-            def component = new JokerComponent()
+    def "check the state of selecting or not by isSelected()"(){
         when:
             component.select()
         then:

@@ -6,12 +6,12 @@ import robot.abstracts.Path;
 
 import java.awt.*;
 
-public class DragPath implements Path {
+public class FestDragPath implements Path {
 
     private Point from;
     private FestRobot robot;
 
-    public DragPath( FestRobot robot ){
+    public FestDragPath( FestRobot robot ){
         this.robot = robot;
     }
 

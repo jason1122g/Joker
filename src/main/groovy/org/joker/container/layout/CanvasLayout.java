@@ -4,7 +4,7 @@ import org.joker.container.JokerLayer;
 
 import java.awt.*;
 
-public class CanvasLayoutManager implements LayoutManager {
+public class CanvasLayout implements LayoutManager {
 
     @Override
     public void addLayoutComponent( String name, Component comp ) {}

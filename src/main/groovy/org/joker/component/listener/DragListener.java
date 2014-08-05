@@ -11,8 +11,8 @@ public class DragListener implements MouseMotionListener{
 
     private Set<JokerComponent>       components         = new HashSet<JokerComponent>();
     private Map<JokerComponent,Point> beforeDragPointMap = new HashMap<JokerComponent, Point>();
-    private Point targetMovePoint;
     private Point beforeDragPoint;
+    private Point beforeDragLocation;
     private boolean isFirstDrag;
 
     public DragListener with( JokerComponent...components ){
@@ -27,17 +27,17 @@ public class DragListener implements MouseMotionListener{
         return this;
     }
 
-    public Set<JokerComponent> components(){
-        return new HashSet<JokerComponent>( components );
+    public boolean contains( JokerComponent component ){
+        return components.contains( component );
     }
 
     @Override
     public void mouseMoved( MouseEvent e ) {
-        if( targetMovePoint != e.getPoint() ){
+        if( beforeDragPoint != e.getPoint() ){
             clearDragCondition();
         }
-        targetMovePoint = e.getPoint();
-        beforeDragPoint = e.getComponent().getLocation();
+        beforeDragPoint    = e.getPoint();
+        beforeDragLocation = e.getComponent().getLocation();
     }
 
     private void clearDragCondition(){
@@ -77,14 +77,14 @@ public class DragListener implements MouseMotionListener{
         Point parentOnScreen = e.getComponent().getParent().getLocationOnScreen();
         Point mouseOnScreen  = e.getLocationOnScreen();
 
-        int nextX = mouseOnScreen.x - parentOnScreen.x - targetMovePoint.x - beforeDragPoint.x;
-        int nextY = mouseOnScreen.y - parentOnScreen.y - targetMovePoint.y - beforeDragPoint.y;
+        int nextX = mouseOnScreen.x - parentOnScreen.x - beforeDragPoint.x - beforeDragLocation.x;
+        int nextY = mouseOnScreen.y - parentOnScreen.y - beforeDragPoint.y - beforeDragLocation.y;
 
         return new Point( nextX, nextY );
 
     }
 
-    private double lengthOf(Point point){
+    private double lengthOf( Point point ){
         double x2 = point.x * point.x;
         double y2 = point.y * point.y;
         return Math.sqrt( x2 + y2 );

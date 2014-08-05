@@ -2,17 +2,17 @@ package org.joker.container;
 
 
 import org.joker.JokerObject;
+import org.joker.component.JokerComponent;
 import org.joker.component.event.SelectEvent;
+import org.joker.component.listener.SelectListener;
 import org.joker.container.abstracts.SelectGroup;
 import org.joker.container.abstracts.SelectObserver;
 
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * TODO TEST AND FINISH THIS
- */
-public class JokerLayer extends JokerObject implements SelectObserver{
+public class JokerLayer extends JokerObject implements SelectObserver {
 
     private SelectGroup selectGroup = new JokerGroup();
 
@@ -27,7 +27,7 @@ public class JokerLayer extends JokerObject implements SelectObserver{
     }
 
     @Override
-    public void notify( SelectEvent selectEvent) {
+    public void notify( SelectEvent selectEvent ) {
         MouseEvent mouseEvent = selectEvent.getMouseEvent();
         if( mouseEvent.isControlDown() ){
             selectGroup.select( selectEvent.getSource() );
@@ -37,4 +37,10 @@ public class JokerLayer extends JokerObject implements SelectObserver{
         }
     }
 
+    public void add( JokerComponent component ){
+        SelectListener selectListener = new SelectListener().triggerFrom( component );
+        component.addMouseListener( selectListener );
+        component.addMouseMotionListener( selectListener );
+        this.add( (Component) component );
+    }
 }

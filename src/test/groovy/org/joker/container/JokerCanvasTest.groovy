@@ -15,7 +15,7 @@ class JokerCanvasTest extends Specification {
     def "canvas can custom size by layoutManager or null"(){
         given:
             def container = injector.getInstance( JPanel.class )
-            def canvas = new JokerCanvas()
+            def canvas    = new JokerCanvas()
         when:
             container.add( canvas )
         and:

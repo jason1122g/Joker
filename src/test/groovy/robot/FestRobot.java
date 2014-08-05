@@ -5,7 +5,7 @@ import org.fest.swing.core.Robot;
 import org.fest.swing.fixture.FrameFixture;
 import org.fest.swing.hierarchy.ComponentHierarchy;
 import robot.abstracts.Path;
-import robot.handler.DragPath;
+import robot.handler.FestDragPath;
 
 import javax.swing.*;
 import java.awt.*;
@@ -276,7 +276,7 @@ public class FestRobot implements Robot{
     }
 
     public Path drag(){
-        return new DragPath(this);
+        return new FestDragPath(this);
     }
 
     public Component findComponentAt(int x, int y){

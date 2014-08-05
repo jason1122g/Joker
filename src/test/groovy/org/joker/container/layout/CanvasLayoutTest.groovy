@@ -7,11 +7,11 @@ import spock.lang.Specification
 import javax.swing.*
 import java.awt.*
 
-class CanvasLayoutManagerTest extends Specification {
+class CanvasLayoutTest extends Specification {
 
-    @Shared LayoutManager layoutManager = new CanvasLayoutManager()
+    @Shared LayoutManager layoutManager = new CanvasLayout()
 
-    def "getPrefferedSize from container"(){
+    def "getPrefferedSize from container equals to container size + indents"(){
         given:
             def container = new JPanel()
         expect:

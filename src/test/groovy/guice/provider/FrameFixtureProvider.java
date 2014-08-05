@@ -6,7 +6,6 @@ import org.fest.swing.edt.GuiQuery;
 import org.fest.swing.fixture.FrameFixture;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class FrameFixtureProvider implements Provider<FrameFixture> {
 
@@ -25,7 +24,7 @@ public class FrameFixtureProvider implements Provider<FrameFixture> {
     private JFrame initFrame(){
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation( WindowConstants.EXIT_ON_CLOSE );
-        frame.setLayout( new BorderLayout() );
+        frame.setLayout( null );
         frame.setSize( 300, 300 );
         return frame;
     }

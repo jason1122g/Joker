@@ -7,17 +7,17 @@ import spock.lang.Specification
 
 import java.awt.event.KeyEvent
 
-class JokerLayerTest extends Specification {
+class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
 
     def "default layout manager is null"(){
         expect:
             new JokerLayer().getLayout() == null
     }
 
-    def "click on its component will trigger the notify method"(){
+    def "click on its component will trigger notify()"(){
         given:
             def component = new  JokerComponent()
-            def layer = Spy( JokerLayer )
+            def layer     = Spy( JokerLayer )
         and:
             layer.add( component )
         and:
@@ -28,14 +28,15 @@ class JokerLayerTest extends Specification {
             1 * layer.notify( _ as SelectEvent )
     }
 
-    def "click on new component will make the previous one unselect"(){
+    def "click on another component will make the previous one unselected"(){
         given:
             def component1 = Spy( JokerComponent )
             def component2 = Spy( JokerComponent )
-            def layer = new JokerLayer()
+            def layer      = new JokerLayer()
         and:
             component1.setSelectable(true)
             component2.setSelectable(true)
+        and:
             layer.add( component1 )
             layer.add( component2 )
         and:
@@ -56,10 +57,11 @@ class JokerLayerTest extends Specification {
         given:
             def component1 = Spy( JokerComponent )
             def component2 = Spy( JokerComponent )
-            def layer = new JokerLayer()
+            def layer      = new JokerLayer()
         and:
             component1.setSelectable(true)
             component2.setSelectable(true)
+        and:
             layer.add( component1 )
             layer.add( component2 )
         and:
@@ -74,11 +76,11 @@ class JokerLayerTest extends Specification {
             1 * component2.select()
     }
 
-    def "click on it will unselect all selected components"(){
+    def "click on layer itself will unselect all selected components"(){
         given:
             def component1 = Spy( JokerComponent )
             def component2 = Spy( JokerComponent )
-            def layer = Spy( JokerLayer )
+            def layer      = Spy( JokerLayer )
         and:
             component1.setSelectable( true )
             component2.setSelectable( true )
@@ -86,7 +88,7 @@ class JokerLayerTest extends Specification {
             layer.add( component1 )
             layer.add( component2 )
         and:
-            def layerSimulator = new EventSimulator( layer )
+            def layerSimulator      = new EventSimulator( layer )
             def component1Simulator = new EventSimulator( component1 )
             def component2Simulator = new EventSimulator( component2 )
         when:

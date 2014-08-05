@@ -7,43 +7,44 @@ import org.joker.component.listener.DragListener;
 import org.joker.container.abstracts.SelectGroup;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class JokerGroup extends JokerObject implements SelectGroup{
 
-    private DragListener dragListener = new DragListener();
     private Set<JokerComponent> selectedSet = new HashSet<JokerComponent>();
+    private DragListener dragListener = new DragListener();
 
     @Override
     public void select( JokerComponent component ) {
-        if( component.isSelectable() && !selectedSet.contains( component ) ){
-            dragListener.with( component );
+        if( component.isSelectable() && !component.isSelected() ){
             component.select();
-            component.addMouseMotionListener(dragListener);
+            if( component.isDraggable() ){
+                component.addMouseMotionListener( dragListener.with( component ) );
+            }
             selectedSet.add( component );
         }
     }
 
     @Override
     public void unselect( JokerComponent component ) {
-        if( selectedSet.contains( component ) ){
-            dragListener.without( component );
+        if( component.isSelected() ){
             component.unselect();
-            component.removeMouseMotionListener(dragListener);
+            component.removeMouseMotionListener( dragListener.without( component ) );
             selectedSet.remove( component );
         }
     }
 
     @Override
     public void unselectAll() {
-        for( JokerComponent selectedComponent : dragListener.components() ){
+        for( JokerComponent selectedComponent : new LinkedList<JokerComponent>( selectedSet ) ){
             unselect( selectedComponent );
         }
     }
 
     @Override
     public Set< JokerComponent > components() {
-        return dragListener.components();
+        return new HashSet<JokerComponent>( selectedSet );
     }
 
 }

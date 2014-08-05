@@ -7,7 +7,7 @@ import java.awt.event.MouseMotionListener
 
 class JokerGroupTest extends Specification {
 
-    def "add can be triggered if selectable, remove can be triggered anytimes"(){
+    def "select() can be triggered if selectable, unselect() after selected, use components() to see all selected"(){
         given:
             def group      = new JokerGroup()
             def component1 = new JokerComponent()
@@ -32,7 +32,7 @@ class JokerGroupTest extends Specification {
             group.components().size() == 0
     }
 
-    def "unselect all"(){
+    def "use unselectAll() to unselect all selected components"(){
         given:
             def group      = new JokerGroup()
             def component1 = new JokerComponent()
@@ -49,7 +49,7 @@ class JokerGroupTest extends Specification {
             group.components().size() == 0
     }
 
-    def "add without selectable then do nothing"(){
+    def "do nothing when select a unselectable component"(){
         given:
             def group      = new JokerGroup()
             def component  = new JokerComponent()
@@ -61,7 +61,7 @@ class JokerGroupTest extends Specification {
             group.components().size() == 0
     }
 
-    def "add will lead to select action and add motionListener"(){
+    def "select() will call select() of the component if selectable"(){
         given:
             def group     = new JokerGroup()
             def component = Spy( JokerComponent )
@@ -71,10 +71,23 @@ class JokerGroupTest extends Specification {
             group.select( component )
         then:
             1 * component.select()
+    }
+
+    def "select() will call addMouseMotionListener() of the component if draggable"(){
+        given:
+            def group     = new JokerGroup()
+            def component = Spy( JokerComponent )
+        and:
+            component.setSelectable( true )
+            component.setDraggable( true )
+        when:
+            group.select( component )
+        then:
+            1 * component.select()
             1 * component.addMouseMotionListener( _ as MouseMotionListener )
     }
 
-    def "remove will lead to unselect action and remove motionListener, can be call after select"(){
+    def "unselect() will call unselect() and removeMouseMotionListener() of the component if it is already selected"(){
         given:
             def group     = new JokerGroup()
             def component = Spy( JokerComponent )
@@ -88,7 +101,7 @@ class JokerGroupTest extends Specification {
             1 * component.removeMouseMotionListener( _ as MouseMotionListener )
     }
 
-    def "remove directly will do nothing"(){
+    def "call unselect() directly will do nothing"(){
         given:
             def group     = new JokerGroup()
             def component = Mock( JokerComponent )

@@ -1,5 +1,7 @@
 package robot;
 
+import robot.handler.EventDragPath;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -14,8 +16,11 @@ public class EventSimulator {
         this.component = eventTarget;
     }
 
-    public void click(){
+    public EventSimulator click(){
+        mousePress();
         click( new Point(1,1), 1 );
+        mouseRelease();
+        return this;
     }
 
     public void click( Point where ){
@@ -34,6 +39,11 @@ public class EventSimulator {
         dispatch( eventSource, MouseEvent.MOUSE_CLICKED, where, times );
     }
 
+    public EventSimulator mousePress(){
+        mousePress( new Point( 1, 1 ) );
+        return this;
+    }
+
     public void mousePress( Point where ){
         mousePress( where, 1 );
     }
@@ -48,6 +58,11 @@ public class EventSimulator {
       
     public void mousePress( JComponent eventSource, Point where, int times ){
         dispatch( eventSource, MouseEvent.MOUSE_PRESSED, where, times );
+    }
+
+    public EventSimulator mouseRelease(){
+        mouseRelease( new Point( 1, 1 ) );
+        return this;
     }
 
     public void mouseRelease( Point where ){
@@ -73,16 +88,33 @@ public class EventSimulator {
     public void mouseMove( JComponent eventSource, Point where ){
         dispatch( eventSource, MouseEvent.MOUSE_MOVED, where, 1 );
     }
-    
-    public void dragTo( Point where ){
-        dragTo( component, where );
+
+    public EventDragPath drag(){
+        return new EventDragPath( this );
     }
 
-    public void dragTo( JComponent eventSource, Point where ){
-        mouseMove ( eventSource, new Point(0,0) );
-        mousePress( eventSource, new Point(0,0), 1 );
+    public void mouseDrag( Point where ){
+        mouseDrag( component, where );
+    }
+
+    public void mouseDrag( JComponent eventSource, Point where ){
         dispatch( eventSource, MouseEvent.MOUSE_DRAGGED, where, 1 );
-        mouseRelease( eventSource, where, 1 );
+    }
+
+    public void mouseEnter(){
+        mouseEnter( component );
+    }
+
+    public void mouseEnter( JComponent eventSource ){
+        dispatch( eventSource, MouseEvent.MOUSE_ENTERED, new Point(1,1), 1 );
+    }
+
+    public void mouseExit(){
+        mouseExit( component );
+    }
+
+    public void mouseExit( JComponent eventSource ){
+        dispatch( eventSource, MouseEvent.MOUSE_EXITED, new Point(1,1), 1 );
     }
 
     public void pressKey(int keyCode){
@@ -107,7 +139,7 @@ public class EventSimulator {
         }
     }
 
-    private void dispatch( JComponent component, int key, Point where, int times ){
+    public void dispatch( JComponent component, int key, Point where, int times ){
         component.dispatchEvent( new MouseEvent( component, key, System.currentTimeMillis(), modifier, where.x, where.y, times, false) );
     }
 }

@@ -1,20 +1,19 @@
 package org.joker.component;
 
-import org.joker.JokerObject;
 import org.joker.component.abstracts.Draggable;
 import org.joker.component.abstracts.Resizable;
 import org.joker.component.abstracts.Selectable;
-import org.joker.component.listener.DragListener;
+import org.joker.component.event.StatusEvent;
+import org.joker.component.event.StatusProvider;
+import org.joker.component.event.StatusType;
 
 
-public class JokerComponent extends JokerObject implements Draggable,Resizable,Selectable {
+public class JokerComponent extends StatusProvider implements Draggable,Resizable,Selectable {
 
     private boolean isDraggable;
     private boolean isResizable;
     private boolean isSelectable;
     private boolean isSelected;
-
-    private DragListener dragListener = new DragListener().with( this );
 
     @Override
     public boolean isResizable() {
@@ -24,6 +23,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     @Override
     public void setResizable( boolean isResizable ) {
         this.isResizable = isResizable;
+        this.dispatchEvent( new StatusEvent( this, StatusType.Resizable, isResizable ) );
     }
 
     @Override
@@ -33,23 +33,23 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
 
     @Override
     public void setDraggable( boolean isDraggable ){
-        if( isDraggable ){
-            this.addMouseMotionListener( dragListener );
-        }else{
-            this.removeMouseMotionListener( dragListener );
-        }
         this.isDraggable = isDraggable;
+        this.dispatchEvent( new StatusEvent( this, StatusType.Draggable, isDraggable ) );
     }
 
     @Override
     public void select() {
-        isSelected = true;
-        repaint();
+        setSelected( true );
     }
 
     @Override
     public void unselect() {
-        isSelected = false;
+        setSelected( false );
+    }
+
+    private void setSelected( boolean isSelected ){
+        this.isSelected = isSelected;
+        this.dispatchEvent( new StatusEvent( this, StatusType.Selected, isSelected ) );
         repaint();
     }
 
@@ -66,6 +66,7 @@ public class JokerComponent extends JokerObject implements Draggable,Resizable,S
     @Override
     public void setSelectable( boolean isSelectable ) {
         this.isSelectable = isSelectable;
+        this.dispatchEvent( new StatusEvent( this, StatusType.Selectable, isSelectable ) );
     }
 
 }

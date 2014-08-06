@@ -3,7 +3,7 @@ package org.joker.component.listener;
 import org.joker.component.JokerComponent;
 import org.joker.component.event.SelectEvent;
 import org.joker.container.abstracts.SelectObserver;
-import org.joker.exceptions.IllegalContainerException;
+import org.joker.tool.Parent;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 
 public class SelectListener extends MouseAdapter{
 
-    private SelectObserver selectObserver;
     private JokerComponent component;
 
     private Point   lastPressPoint;
@@ -50,10 +49,7 @@ public class SelectListener extends MouseAdapter{
 
     private void tryNotifyParent( MouseEvent e ){
         if( lengthOf( e.getPoint(), lastPressPoint ) < dragMinLength ){
-            if(selectObserver == null){
-                initObserver();
-            }
-            selectObserver.notify( new SelectEvent( component, e ) );
+            Parent.of( component ).as( SelectObserver.class ).notify( new SelectEvent( component, e ) );
         }
     }
 
@@ -63,14 +59,4 @@ public class SelectListener extends MouseAdapter{
         return Math.sqrt( X*X + Y*Y );
     }
 
-    private void initObserver(){
-        if( component.getParent() == null ){
-            throw new IllegalContainerException( "must have a container" );
-        }
-        try{
-            selectObserver = (SelectObserver) component.getParent();
-        }catch ( ClassCastException e ){
-            throw new IllegalContainerException( "container must be JokerLayer/SelectObserver" );
-        }
-    }
 }

@@ -9,39 +9,50 @@ import java.awt.event.KeyEvent
 
 class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
 
-    def "default layout manager is null"(){
-        expect:
-            new JokerLayer().getLayout() == null
+    JokerComponent component1
+    JokerComponent component2
+    JokerLayer layer
+
+    EventSimulator layerSimulator
+    EventSimulator component1Simulator
+    EventSimulator component2Simulator
+
+    def setup(){
+        component1 = Spy( JokerComponent )
+        component2 = Spy( JokerComponent )
+        layer      = Spy( JokerLayer )
+
+        layerSimulator      = new EventSimulator( layer )
+        component1Simulator = new EventSimulator( component1 )
+        component2Simulator = new EventSimulator( component2 )
+
+        layer.add( component1 )
+        layer.add( component2 )
     }
 
-    def "click on its component will trigger notify()"(){
+    def "default layout manager is null"(){
+        expect:
+            layer.getLayout() == null
+    }
+
+    def "click on its selectable component will trigger notify()"(){
         given:
-            def component = new  JokerComponent()
-            def layer     = Spy( JokerLayer )
-        and:
-            layer.add( component )
-        and:
-            def component1Simulator = new EventSimulator( component )
+            component1.setSelectable( selectable )
         when:
             component1Simulator.click()
         then:
-            1 * layer.notify( _ as SelectEvent )
+            times * layer.notify( _ as SelectEvent )
+
+        where:
+            selectable | times
+            true       | 1
+            false      | 0
     }
 
     def "click on another component will make the previous one unselected"(){
         given:
-            def component1 = Spy( JokerComponent )
-            def component2 = Spy( JokerComponent )
-            def layer      = new JokerLayer()
-        and:
             component1.setSelectable(true)
             component2.setSelectable(true)
-        and:
-            layer.add( component1 )
-            layer.add( component2 )
-        and:
-            def component1Simulator = new EventSimulator( component1 )
-            def component2Simulator = new EventSimulator( component2 )
         when:
             component1Simulator.click()
         then:
@@ -55,18 +66,8 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
 
     def "click on its components with ctrl can apply multi-select"(){
         given:
-            def component1 = Spy( JokerComponent )
-            def component2 = Spy( JokerComponent )
-            def layer      = new JokerLayer()
-        and:
             component1.setSelectable(true)
             component2.setSelectable(true)
-        and:
-            layer.add( component1 )
-            layer.add( component2 )
-        and:
-            def component1Simulator = new EventSimulator( component1 )
-            def component2Simulator = new EventSimulator( component2 )
         when:
             component1Simulator.click()
             component2Simulator.pressKey( KeyEvent.VK_CONTROL )
@@ -78,19 +79,8 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
 
     def "click on layer itself will unselect all selected components"(){
         given:
-            def component1 = Spy( JokerComponent )
-            def component2 = Spy( JokerComponent )
-            def layer      = Spy( JokerLayer )
-        and:
             component1.setSelectable( true )
             component2.setSelectable( true )
-        and:
-            layer.add( component1 )
-            layer.add( component2 )
-        and:
-            def layerSimulator      = new EventSimulator( layer )
-            def component1Simulator = new EventSimulator( component1 )
-            def component2Simulator = new EventSimulator( component2 )
         when:
             component1Simulator.click()
             component2Simulator.click()

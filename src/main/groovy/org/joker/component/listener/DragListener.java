@@ -9,8 +9,8 @@ import java.util.*;
 
 public class DragListener implements MouseMotionListener{
 
-    private Set<JokerComponent>       components         = new HashSet<JokerComponent>();
-    private Map<JokerComponent,Point> beforeDragPointMap = new HashMap<JokerComponent, Point>();
+    private Set<JokerComponent>       components         = new HashSet<>();
+    private Map<JokerComponent,Point> beforeDragPointMap = new HashMap<>();
     private Point beforeDragPoint;
     private Point beforeDragLocation;
     private boolean isFirstDrag;

@@ -4,9 +4,11 @@ package org.joker.container;
 import org.joker.JokerObject;
 import org.joker.component.JokerComponent;
 import org.joker.component.event.SelectEvent;
-import org.joker.component.listener.SelectListener;
 import org.joker.container.abstracts.SelectGroup;
 import org.joker.container.abstracts.SelectObserver;
+import org.joker.container.abstracts.StatusGroup;
+import org.joker.container.group.EventGroup;
+import org.joker.container.group.JokerSelectGroup;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,7 +16,8 @@ import java.awt.event.MouseEvent;
 
 public class JokerLayer extends JokerObject implements SelectObserver {
 
-    private SelectGroup selectGroup = new JokerGroup();
+    private SelectGroup selectGroup = new JokerSelectGroup();
+    private StatusGroup eventGroup  = new EventGroup();
 
     public JokerLayer(){
         this.setLayout( null );
@@ -37,10 +40,23 @@ public class JokerLayer extends JokerObject implements SelectObserver {
         }
     }
 
-    public void add( JokerComponent component ){
-        SelectListener selectListener = new SelectListener().triggerFrom( component );
-        component.addMouseListener( selectListener );
-        component.addMouseMotionListener( selectListener );
-        this.add( (Component) component );
+    @Override
+    public Component add( Component component ){
+        if( component instanceof JokerComponent ){
+            eventGroup.add( (JokerComponent) component );
+        }
+        return super.add( component );
     }
+
+    @Override
+    public void remove( Component component ){
+        if( component instanceof JokerComponent ){
+            JokerComponent jokerComponent = (JokerComponent) component;
+            selectGroup.unselect( jokerComponent );
+            eventGroup.remove( jokerComponent );
+        }
+        super.remove( component );
+    }
+
 }
+  

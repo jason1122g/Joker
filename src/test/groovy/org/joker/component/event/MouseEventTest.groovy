@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent
 
 class MouseEventTest extends Specification {
 
-    def "the params injected into event can be get by methods"(){
+    def "set data only by constructor, get data by methods"(){
         given:
             def component   = new JokerComponent()
             def mouseEvent  = new MouseEvent( component, 0, 0, 0, 0, 0, 0, false )

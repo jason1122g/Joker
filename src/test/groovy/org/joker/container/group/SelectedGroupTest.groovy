@@ -5,11 +5,11 @@ import spock.lang.Specification
 
 import java.awt.event.MouseMotionListener
 
-class JokerSelectGroupTest extends Specification {
+class SelectedGroupTest extends Specification {
 
     def "select() can be triggered if selectable, unselect() after selected, use components() to see all selected"(){
         given:
-            def group      = new JokerSelectGroup()
+            def group      = new SelectedGroup()
             def component1 = new JokerComponent()
             def component2 = new JokerComponent()
         and:
@@ -34,7 +34,7 @@ class JokerSelectGroupTest extends Specification {
 
     def "use unselectAll() to unselect all selected components"(){
         given:
-            def group      = new JokerSelectGroup()
+            def group      = new SelectedGroup()
             def component1 = new JokerComponent()
             def component2 = new JokerComponent()
         and:
@@ -51,7 +51,7 @@ class JokerSelectGroupTest extends Specification {
 
     def "select() will not check the selectable state"(){
         given:
-            def group      = new JokerSelectGroup()
+            def group      = new SelectedGroup()
             def component  = new JokerComponent()
         and:
             component.setSelectable( false )
@@ -63,7 +63,7 @@ class JokerSelectGroupTest extends Specification {
 
     def "select() will call select() of the component if selectable"(){
         given:
-            def group     = new JokerSelectGroup()
+            def group     = new SelectedGroup()
             def component = Spy( JokerComponent )
         and:
             component.setSelectable( true )
@@ -75,7 +75,7 @@ class JokerSelectGroupTest extends Specification {
 
     def "select() will call addMouseMotionListener() of the component if draggable"(){
         given:
-            def group     = new JokerSelectGroup()
+            def group     = new SelectedGroup()
             def component = Spy( JokerComponent )
         and:
             component.setSelectable( true )
@@ -89,7 +89,7 @@ class JokerSelectGroupTest extends Specification {
 
     def "unselect() will call unselect() and removeMouseMotionListener() of the component if it is already selected"(){
         given:
-            def group     = new JokerSelectGroup()
+            def group     = new SelectedGroup()
             def component = Spy( JokerComponent )
         and:
             component.setSelectable( true )
@@ -103,7 +103,7 @@ class JokerSelectGroupTest extends Specification {
 
     def "call unselect() directly will do nothing"(){
         given:
-            def group     = new JokerSelectGroup()
+            def group     = new SelectedGroup()
             def component = Mock( JokerComponent )
         when:
             group.unselect( component )

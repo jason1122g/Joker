@@ -7,8 +7,8 @@ import org.joker.component.event.SelectEvent;
 import org.joker.container.abstracts.SelectGroup;
 import org.joker.container.abstracts.SelectObserver;
 import org.joker.container.abstracts.StatusGroup;
-import org.joker.container.group.EventGroup;
-import org.joker.container.group.JokerSelectGroup;
+import org.joker.container.group.SelectedGroup;
+import org.joker.container.group.StatusObserveGroup;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -16,8 +16,8 @@ import java.awt.event.MouseEvent;
 
 public class JokerLayer extends JokerObject implements SelectObserver {
 
-    private SelectGroup selectGroup = new JokerSelectGroup();
-    private StatusGroup eventGroup  = new EventGroup();
+    private SelectGroup selectGroup = new SelectedGroup();
+    private StatusGroup eventGroup  = new StatusObserveGroup();
 
     public JokerLayer(){
         this.setLayout( null );

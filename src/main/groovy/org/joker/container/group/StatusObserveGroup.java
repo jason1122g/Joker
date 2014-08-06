@@ -10,21 +10,21 @@ import org.joker.container.abstracts.StatusGroup;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EventGroup implements StatusGroup {
+public class StatusObserveGroup implements StatusGroup {
 
     private StatusChangedListener listener = new StatusListener();
     private Set<JokerComponent> components = new HashSet<>();
 
     @Override
     public void add( JokerComponent component ) {
-        if( !components.contains( component ) ){
+        if( !components.contains( component ) ) {
             component.addStatusChangedListener( listener );
             tryTriggerAllOnce( component );
             components.add   ( component );
         }
     }
 
-    private void tryTriggerAllOnce( JokerComponent component ){ //TODO TEST
+    private void tryTriggerAllOnce( JokerComponent component ) {
         listener.draggableChanged ( new StatusEvent( component, StatusType.Draggable , component.isDraggable()  ) );
         listener.resizableChanged ( new StatusEvent( component, StatusType.Resizable , component.isResizable()  ) );
         listener.selectableChanged( new StatusEvent( component, StatusType.Selectable, component.isSelectable() ) );
@@ -40,7 +40,7 @@ public class EventGroup implements StatusGroup {
         }
     }
 
-    private void triggerAllOnce( JokerComponent component ){
+    private void triggerAllOnce( JokerComponent component ) {
         listener.draggableChanged ( new StatusEvent( component, StatusType.Draggable , false ) );
         listener.resizableChanged ( new StatusEvent( component, StatusType.Resizable , false ) );
         listener.selectableChanged( new StatusEvent( component, StatusType.Selectable, false ) );
@@ -49,7 +49,7 @@ public class EventGroup implements StatusGroup {
 
     @Override
     public void removeAll() {
-        for( JokerComponent component : components ){
+        for( JokerComponent component : components ) {
             component.removeStatusChangedListener( listener );
         }
         components.clear();

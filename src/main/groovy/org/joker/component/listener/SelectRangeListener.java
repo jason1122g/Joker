@@ -35,8 +35,14 @@ public class SelectRangeListener extends MouseAdapter {
     @Override
     public void mouseReleased( MouseEvent e ) {
         endPoint = e.getPoint();
-        selectGroup.unselectAll();
+        checkControlDown( e );
         selectAllInRange();
+    }
+
+    private void checkControlDown( MouseEvent e ){
+        if( ! e.isControlDown() ){
+            selectGroup.unselectAll();
+        }
     }
 
     private void selectAllInRange(){

@@ -14,6 +14,7 @@ import org.joker.container.group.StatusObserveGroup;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Set;
 
 public class JokerLayer extends JokerObject implements SelectObserver {
 
@@ -27,7 +28,7 @@ public class JokerLayer extends JokerObject implements SelectObserver {
             public void mouseClicked( MouseEvent e ) {
                 selectGroup.unselectAll();
             }
-        });
+        }  );
         this.addMouseListener( SelectRangeListener.useGroup( selectGroup ).withContainer( this ) );
     }
 
@@ -45,6 +46,7 @@ public class JokerLayer extends JokerObject implements SelectObserver {
             selectGroup.unselectAll();
             selectGroup.select( componentSource );
         }
+        repaint();
     }
 
     @Override
@@ -63,6 +65,11 @@ public class JokerLayer extends JokerObject implements SelectObserver {
             eventGroup.remove( jokerComponent );
         }
         super.remove( component );
+    }
+
+    @Override
+    public Set<JokerComponent> selectedComponents() {
+        return selectGroup.components();
     }
 
 }

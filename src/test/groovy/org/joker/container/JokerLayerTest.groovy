@@ -102,4 +102,13 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
             1 * component2.unselect()
     }
 
+    def "use selectedComponentes() to get all selected components"(){
+        given:
+            component1.setSelectable( true )
+        when:
+            component1Simulator.click()
+        then:
+            layer.selectedComponents().contains( component1 )
+    }
+
 }

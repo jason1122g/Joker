@@ -16,6 +16,11 @@ class SelectSingleListenerTest2 extends Specification{
         void notify(SelectEvent selectEvent) {
 
         }
+
+        @Override
+        Set<JokerComponent> selectedComponents() {
+            return null
+        }
     }
 
     TestContainer  container

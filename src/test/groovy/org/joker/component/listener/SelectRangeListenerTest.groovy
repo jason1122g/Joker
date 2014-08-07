@@ -7,6 +7,7 @@ import spock.lang.Specification
 
 import javax.swing.*
 import java.awt.*
+import java.awt.event.KeyEvent
 
 class SelectRangeListenerTest extends Specification {
 
@@ -54,6 +55,19 @@ class SelectRangeListenerTest extends Specification {
             containerSimulator.drag().from( new Point(20,20) ).to( new Point(120,120) )
         then:
             0 * selectGroup.select( component1 )
+    }
+
+    def "drag with ctrl pressed will not unselect previous components"(){
+        given:
+            component1.setBounds( 10, 10, 30, 30 )
+            component2.setBounds( 100, 100, 30, 30 )
+        when:
+            containerSimulator.drag().from( new Point(0,0) ).to( new Point(50,50) )
+        and:
+            containerSimulator.pressKey( KeyEvent.VK_CONTROL )
+            containerSimulator.drag().from( new Point(90,90) ).to( new Point(150,150) )
+        then:
+            0 * selectGroup.unselect( _ as JokerComponent )
     }
 
     def "four ways select are ok"(){

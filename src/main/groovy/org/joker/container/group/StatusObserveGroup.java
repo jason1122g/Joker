@@ -35,12 +35,12 @@ public class StatusObserveGroup implements StatusGroup {
     public void remove( JokerComponent component ) {
         if( components.contains( component ) ){
             component.removeStatusChangedListener( listener );
-            triggerAllOnce   ( component );
-            components.remove( component );
+            triggerAllFalseOnce( component );
+            components.remove  ( component );
         }
     }
 
-    private void triggerAllOnce( JokerComponent component ) {
+    private void triggerAllFalseOnce( JokerComponent component ) {
         listener.draggableChanged ( new StatusEvent( component, StatusType.Draggable , false ) );
         listener.resizableChanged ( new StatusEvent( component, StatusType.Resizable , false ) );
         listener.selectableChanged( new StatusEvent( component, StatusType.Selectable, false ) );

@@ -49,6 +49,7 @@ public class DragListener implements MouseMotionListener{
     public void mouseDragged( MouseEvent e ) {
         tryInitDragCondition();
         setNextLocationOfAll(e);
+        repaintParent(); //TODO CHECK IF REASONABLE HERE
     }
 
     private void tryInitDragCondition(){
@@ -88,6 +89,10 @@ public class DragListener implements MouseMotionListener{
         double x2 = point.x * point.x;
         double y2 = point.y * point.y;
         return Math.sqrt( x2 + y2 );
+    }
+
+    private void repaintParent(){
+        components.iterator().next().getParent().repaint();
     }
 
 }

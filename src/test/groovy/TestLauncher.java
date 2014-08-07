@@ -15,6 +15,12 @@ public class TestLauncher {
 
         final JokerLayer layer = new JokerLayer(){
             public void paintComponent(Graphics g){
+                for ( JokerComponent comp : selectedComponents() ){
+                    g.fillRect( comp.getX() + comp.getWidth()/2 -3, comp.getY()-6, 6, 6);
+                    g.fillRect( comp.getX() + comp.getWidth()/2 -3, comp.getY() + comp.getHeight(), 6, 6);
+                    g.fillRect( comp.getX() -6, comp.getY() + comp.getHeight()/2 -3, 6, 6 );
+                    g.fillRect( comp.getX() + comp.getWidth(), comp.getY() + comp.getHeight()/2 -3, 6, 6 );
+                }
                 g.drawRect(1,1,this.getWidth()-3,this.getHeight()-3);
                 g.drawRect( rectangle.x, rectangle.y, rectangle.width, rectangle.height );
             }
@@ -57,14 +63,8 @@ public class TestLauncher {
             JokerComponent component = new JokerComponent(){
                 public void paintComponent(Graphics g){
                     g.setColor(color);
-                    g.drawRect(3,3,this.getWidth()-4,this.getHeight()-4);
+                    g.drawRect(0,0,this.getWidth()-1,this.getHeight()-1);
                     g.drawString(number+"",10,10);
-                    if( isSelected() ){
-                        g.fillRect( getWidth()/2-3,-6,6,12 );
-                        g.fillRect( getWidth()/2-3,getHeight()-6,6,12 );
-                        g.fillRect( -6,getHeight()/2-3,12,6 );
-                        g.fillRect( getWidth()-6,getHeight()/2-3,12,6 );
-                    }
                 }
             };
             component.setBounds(10+i*50,10+i*50,50,50);

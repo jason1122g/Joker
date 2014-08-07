@@ -20,7 +20,7 @@ public class SelectedGroup extends JokerObject implements SelectGroup {
         if( !component.isSelected() ){
             component.select();
             if( component.isDraggable() ){
-                component.addMouseMotionListener( dragListener.with( component ) );
+                component.addMouseMotionListener( dragListener.dragWith( component ) );
             }
             selectedSet.add( component );
         }
@@ -30,7 +30,7 @@ public class SelectedGroup extends JokerObject implements SelectGroup {
     public void unselect( JokerComponent component ) {
         if( component.isSelected() ){
             component.unselect();
-            component.removeMouseMotionListener( dragListener.without( component ) );
+            component.removeMouseMotionListener( dragListener.dragWithout( component ) );
             selectedSet.remove( component );
         }
     }

@@ -4,6 +4,7 @@ package org.joker.container;
 import org.joker.JokerObject;
 import org.joker.component.JokerComponent;
 import org.joker.component.event.SelectEvent;
+import org.joker.component.listener.SelectRangeListener;
 import org.joker.container.abstracts.SelectGroup;
 import org.joker.container.abstracts.SelectObserver;
 import org.joker.container.abstracts.StatusGroup;
@@ -27,16 +28,22 @@ public class JokerLayer extends JokerObject implements SelectObserver {
                 selectGroup.unselectAll();
             }
         });
+        this.addMouseListener( SelectRangeListener.useGroup( selectGroup ).withContainer( this ) );
     }
 
     @Override
     public void notify( SelectEvent selectEvent ) {
-        MouseEvent mouseEvent = selectEvent.getMouseEvent();
+        MouseEvent     mouseEvent      = selectEvent.getMouseEvent();
+        JokerComponent componentSource = selectEvent.getSource();
         if( mouseEvent.isControlDown() ){
-            selectGroup.select( selectEvent.getSource() );
+            if( componentSource.isSelected() ){
+                selectGroup.unselect( componentSource );
+            }else{
+                selectGroup.select  ( componentSource );
+            }
         }else{
             selectGroup.unselectAll();
-            selectGroup.select( selectEvent.getSource() );
+            selectGroup.select( componentSource );
         }
     }
 

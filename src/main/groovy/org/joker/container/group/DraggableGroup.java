@@ -15,7 +15,7 @@ public class DraggableGroup implements StatusGroup {
     @Override
     public void add( JokerComponent component ) {
         if( !listenerMap.containsKey( component ) ){
-            DragListener dragListener = new DragListener().with( component );
+            DragListener dragListener = new DragListener().dragWith( component );
             component.addMouseMotionListener( dragListener );
             listenerMap.put( component, dragListener );
         }

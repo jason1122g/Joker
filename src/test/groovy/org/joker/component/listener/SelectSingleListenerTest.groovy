@@ -7,7 +7,7 @@ import spock.lang.Specification
 
 import javax.swing.*
 
-class SelectListenerTest extends Specification {
+class SelectSingleListenerTest extends Specification {
 
     def "throws exception when clicked if component parent is not observer"(){
         given:
@@ -15,7 +15,7 @@ class SelectListenerTest extends Specification {
             def container = new JPanel()
         and:
             container.add( component )
-            component.addMouseListener( new SelectListener().triggerFrom( component ) )
+            component.addMouseListener( SelectSingleListener.triggerFrom( component ) )
         when:
             new EventSimulator( component ).click()
         then:
@@ -25,7 +25,7 @@ class SelectListenerTest extends Specification {
     def "throws exception when clicked if no parent exist"(){
         given:
             def component = new JokerComponent()
-            component.addMouseListener( new SelectListener().triggerFrom( component ) )
+            component.addMouseListener( SelectSingleListener.triggerFrom( component ) )
         when:
             new EventSimulator( component ).click()
         then:
@@ -36,7 +36,7 @@ class SelectListenerTest extends Specification {
         given:
             def component = new JokerComponent()
         when:
-            component.addMouseListener( new SelectListener().triggerFrom( component ) )
+            component.addMouseListener( SelectSingleListener.triggerFrom( component ) )
         then:
             notThrown( IllegalContainerException )
     }

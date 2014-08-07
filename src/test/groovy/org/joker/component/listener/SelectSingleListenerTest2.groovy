@@ -9,7 +9,7 @@ import spock.lang.Specification
 import javax.swing.*
 import java.awt.*
 
-class SelectListenerTest2 extends Specification{
+class SelectSingleListenerTest2 extends Specification{
 
     class TestContainer extends JComponent implements SelectObserver {
         @Override
@@ -21,9 +21,9 @@ class SelectListenerTest2 extends Specification{
     TestContainer  container
     EventSimulator component
 
-    def setup(){ "use triggerFrom() to specify the event source"
+    def setup(){ "use triggerFrom() to init and specify the event source"
         def component = new JokerComponent()
-        def listener  = new SelectListener().triggerFrom( component )
+        def listener  = SelectSingleListener.triggerFrom( component )
 
         this.container = Spy( TestContainer )
         this.container.add( component )

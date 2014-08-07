@@ -15,12 +15,12 @@ public class DragListener implements MouseMotionListener{
     private Point beforeDragLocation;
     private boolean isFirstDrag;
 
-    public DragListener with( JokerComponent...components ){
+    public DragListener dragWith( JokerComponent... components ){
         Collections.addAll( this.components,components );
         return this;
     }
 
-    public DragListener without( JokerComponent...components ){
+    public DragListener dragWithout( JokerComponent... components ){
         for( JokerComponent component : components ){
             this.components.remove( component );
         }

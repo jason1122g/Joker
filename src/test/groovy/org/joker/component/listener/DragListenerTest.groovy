@@ -28,7 +28,7 @@ class DragListenerTest extends Specification {
     def "inject draggable component into drag listener group using with(), drag distance must > 3px"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragListener().with( component )
+            def dragEvent = new DragListener().dragWith( component )
         and:
             component.addMouseMotionListener( dragEvent )
             component.setBounds( 0, 0, 50, 50 )

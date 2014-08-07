@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SelectListener extends MouseAdapter{
+public class SelectSingleListener extends MouseAdapter{
 
     private JokerComponent component;
 
@@ -17,9 +17,12 @@ public class SelectListener extends MouseAdapter{
     private int     dragMinLength = 3;
     private boolean isDragged;
 
-    public SelectListener triggerFrom( JokerComponent component ){
+    private SelectSingleListener( JokerComponent component ){
         this.component = component;
-        return this;
+    }
+
+    public static SelectSingleListener triggerFrom( JokerComponent component ){
+        return new SelectSingleListener ( component ) ;
     }
 
     @Override

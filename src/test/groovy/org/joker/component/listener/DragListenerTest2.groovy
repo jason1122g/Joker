@@ -8,7 +8,7 @@ class DragListenerTest2 extends Specification {
     def "injected draggable component can be checked if exists by contains()"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragListener().with( component )
+            def dragEvent = new DragListener().dragWith( component )
         expect:
             dragEvent.contains( component )
     }
@@ -16,7 +16,7 @@ class DragListenerTest2 extends Specification {
     def "use without() to remove the injected draggable component"(){
         given:
             def component = new JokerComponent()
-            def dragEvent = new DragListener().with( component ).without( component )
+            def dragEvent = new DragListener().dragWith( component ).dragWithout( component )
         expect:
             !dragEvent.contains( component )
     }

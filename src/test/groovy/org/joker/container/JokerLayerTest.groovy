@@ -51,8 +51,8 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
 
     def "click on another component will make the previous one unselected"(){
         given:
-            component1.setSelectable(true)
-            component2.setSelectable(true)
+            component1.setSelectable( true )
+            component2.setSelectable( true )
         when:
             component1Simulator.click()
         then:
@@ -66,8 +66,8 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
 
     def "click on its components with ctrl can apply multi-select"(){
         given:
-            component1.setSelectable(true)
-            component2.setSelectable(true)
+            component1.setSelectable( true )
+            component2.setSelectable( true )
         when:
             component1Simulator.click()
             component2Simulator.pressKey( KeyEvent.VK_CONTROL )
@@ -75,6 +75,18 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
         then:
             1 * component1.select()
             1 * component2.select()
+    }
+
+    def "click with ctrl on selected component can unselect it"(){
+        given:
+            component1.setSelectable( true )
+        when:
+            component1Simulator.click()
+            component1Simulator.pressKey( KeyEvent.VK_CONTROL )
+            component1Simulator.click()
+        then:
+            1 * component1.select()
+            1 * component1.unselect()
     }
 
     def "click on layer itself will unselect all selected components"(){

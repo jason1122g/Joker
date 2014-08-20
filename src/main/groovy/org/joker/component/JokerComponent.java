@@ -21,7 +21,7 @@ public class JokerComponent extends StatusProvider implements Draggable,Resizabl
     }
 
     @Override
-    public void setResizable( boolean isResizable ) {
+    public void setResizable( boolean isResizable ) { //TODO PULL UP ?
         this.isResizable = isResizable;
         this.dispatchEvent( new StatusEvent( this, StatusType.Resizable, isResizable ) );
     }
@@ -50,7 +50,6 @@ public class JokerComponent extends StatusProvider implements Draggable,Resizabl
     private void setSelected( boolean isSelected ){
         this.isSelected = isSelected;
         this.dispatchEvent( new StatusEvent( this, StatusType.Selected, isSelected ) );
-        repaint();
     }
 
     @Override

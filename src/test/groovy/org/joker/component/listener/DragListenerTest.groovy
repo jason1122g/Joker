@@ -3,8 +3,8 @@ package org.joker.component.listener
 import com.google.inject.Guice
 import com.google.inject.Injector
 import guice.modules.TestModule
+import org.jason1122g.gionic.awt.simulator.Gionic
 import org.joker.component.JokerComponent
-import robot.EventSimulator
 import spock.lang.Shared
 import spock.lang.Specification
 
@@ -35,7 +35,10 @@ class DragListenerTest extends Specification {
         and:
             frame.add( component )
         when:
-            new EventSimulator(component).drag().from( new Point(25,25) ).to( new Point(125,125) )
+            def componentSimu = Gionic.control( component )
+        and:
+            componentSimu.move().from( 0,0 ).to( 25, 25 ).endHere()
+            componentSimu.drag().from( 25, 25 ).to( 125, 125 ).endHere()
         then:
             component.getLocation() == new Point( 100, 100 )
     }

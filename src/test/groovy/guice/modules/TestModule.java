@@ -14,7 +14,7 @@ public class TestModule extends AbstractModule {
     @Override
     protected void configure() {
         bind( FrameFixture.class ).toProvider( FrameFixtureProvider.class );
-        bind( JokerCanvas.class ) .toProvider( JokerCanvasProvider.class );
+        bind( JokerCanvas.class  ).toProvider( JokerCanvasProvider.class );
     }
 
     @Provides

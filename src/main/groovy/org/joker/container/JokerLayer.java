@@ -18,8 +18,8 @@ import java.util.Set;
 
 public class JokerLayer extends JokerObject implements SelectObserver {
 
-    private SelectGroup selectGroup = new SelectedGroup();
-    private StatusGroup eventGroup  = new StatusObserveGroup();
+    private SelectGroup selectGroup        = new SelectedGroup();
+    private StatusGroup statusObserveGroup = new StatusObserveGroup();
 
     public JokerLayer(){
         this.setLayout( null );
@@ -52,7 +52,7 @@ public class JokerLayer extends JokerObject implements SelectObserver {
     @Override
     public Component add( Component component ){
         if( component instanceof JokerComponent ){
-            eventGroup.add( (JokerComponent) component );
+            statusObserveGroup.add( (JokerComponent) component );
         }
         return super.add( component );
     }
@@ -61,8 +61,8 @@ public class JokerLayer extends JokerObject implements SelectObserver {
     public void remove( Component component ){
         if( component instanceof JokerComponent ){
             JokerComponent jokerComponent = (JokerComponent) component;
-            selectGroup.unselect( jokerComponent );
-            eventGroup.remove( jokerComponent );
+            selectGroup.unselect     ( jokerComponent );
+            statusObserveGroup.remove( jokerComponent );
         }
         super.remove( component );
     }

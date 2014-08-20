@@ -7,7 +7,7 @@ class StatusEventTest extends Specification {
 
     def "set data only by constructor, get data by methods"(){
         given:
-            def source = new JokerComponent()
+            def source = Mock( JokerComponent )
         when:
             def event  = new StatusEvent( source, status, flag )
         then:

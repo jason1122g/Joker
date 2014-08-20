@@ -1,39 +1,37 @@
 package org.joker.component.listener
 
+import org.jason1122g.gionic.awt.simulator.Gionic
+import org.jason1122g.gionic.core.Simulator
 import org.joker.component.JokerComponent
 import org.joker.container.abstracts.SelectGroup
-import robot.EventSimulator
 import spock.lang.Specification
 
 import javax.swing.*
-import java.awt.*
 import java.awt.event.KeyEvent
 
 class SelectRangeListenerTest extends Specification {
 
-    SelectRangeListener rangeListener
-    Container      container
     SelectGroup    selectGroup
     JokerComponent component1
     JokerComponent component2
     JComponent     component3
-    EventSimulator containerSimulator
+    Simulator container
 
     def setup(){  "add 3 components to container and use useGroup() and withContainer() to init"
-        selectGroup        = Mock( SelectGroup )
-        container          = new JPanel()
-        containerSimulator = new EventSimulator( container )
+        def containerPanel = new JPanel()
+        selectGroup = Mock( SelectGroup )
+        container   = Gionic.control( containerPanel )
 
         component1  = new JokerComponent()
         component2  = new JokerComponent()
         component3  = new JLabel()
 
-        container.add( component1 )
-        container.add( component2 )
-        container.add( component3 )
+        containerPanel.add( component1 )
+        containerPanel.add( component2 )
+        containerPanel.add( component3 )
 
-        rangeListener = SelectRangeListener.useGroup( selectGroup ).withContainer( container )
-        container.addMouseListener( rangeListener )
+        def rangeListener = SelectRangeListener.useGroup( selectGroup ).withContainer( containerPanel )
+        containerPanel.addMouseListener( rangeListener )
     }
 
 
@@ -43,7 +41,7 @@ class SelectRangeListenerTest extends Specification {
             component2.setBounds( 40, 40, 30, 30 )
             component3.setBounds( 70, 70, 30, 30 )
         when:
-            containerSimulator.drag().from( new Point(0,0) ).to( new Point(120,120) )
+            container.drag().from( 0, 0 ).to( 120, 120 ).endHere()
         then:
             2 * selectGroup.select( _ as JokerComponent )
     }
@@ -52,7 +50,7 @@ class SelectRangeListenerTest extends Specification {
         given:
             component1.setBounds( 10, 10, 100, 100 )
         when:
-            containerSimulator.drag().from( new Point(20,20) ).to( new Point(120,120) )
+            container.drag().from( 20, 20 ).to( 120, 120 ).endHere()
         then:
             0 * selectGroup.select( component1 )
     }
@@ -62,10 +60,10 @@ class SelectRangeListenerTest extends Specification {
             component1.setBounds( 10, 10, 30, 30 )
             component2.setBounds( 100, 100, 30, 30 )
         when:
-            containerSimulator.drag().from( new Point(0,0) ).to( new Point(50,50) )
+            container.drag().from( 0, 0 ).to( 50, 50 ).endHere()
         and:
-            containerSimulator.pressKey( KeyEvent.VK_CONTROL )
-            containerSimulator.drag().from( new Point(90,90) ).to( new Point(150,150) )
+            container.keyPress().of( KeyEvent.VK_CONTROL )
+            container.drag().from( 90, 90 ).to( 150, 150 ).endHere()
         then:
             0 * selectGroup.unselect( _ as JokerComponent )
     }
@@ -74,10 +72,10 @@ class SelectRangeListenerTest extends Specification {
         given:
             component1.setBounds( 30, 30, 30, 30 )
         when:
-            containerSimulator.drag().from( new Point(10,10)   ).to( new Point(100,100) )
-            containerSimulator.drag().from( new Point(100,10)  ).to( new Point(10,100)  )
-            containerSimulator.drag().from( new Point(10,100)  ).to( new Point(100,10)  )
-            containerSimulator.drag().from( new Point(100,100) ).to( new Point(10,10)   )
+            container.drag().from( 10, 10   ).to( 100, 100 ).endHere()
+            container.drag().from( 100, 10  ).to( 10, 100  ).endHere()
+            container.drag().from( 10, 100  ).to( 100, 10  ).endHere()
+            container.drag().from( 100, 100 ).to( 10, 10   ).endHere()
         then:
             4 * selectGroup.select( component1 )
     }

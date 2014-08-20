@@ -22,6 +22,9 @@ buildscript {
 repositories {
     mavenCentral()
     maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    flatDir {
+        dirs "vendor"
+    }
 }
 
 dependencies {
@@ -29,10 +32,14 @@ dependencies {
     testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
 
     testRuntime "cglib:cglib-nodep:2.2.2"        // allows mocking of classes (in addition to interfaces)
+    testRuntime "org.objenesis:objenesis:1.2"    // allows mocking of classes without default constructor (together with CGLIB)
 
     testCompile 'org.easytesting:fest-swing:1.2.1'
 
     testCompile 'com.google.inject:guice:3.0'
+
+    compile name: 'gionic-awt-0.1.0-SNAPSHOT'
+    compile name: 'gionic-core-0.1.0-SNAPSHOT'
 }
 
 cobertura.coverageSourceDirs = sourceSets.main.groovy.srcDirs

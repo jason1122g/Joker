@@ -1,8 +1,9 @@
 package org.joker.container
 
+import org.jason1122g.gionic.awt.simulator.Gionic
+import org.jason1122g.gionic.core.Simulator
 import org.joker.component.JokerComponent
 import org.joker.component.event.SelectEvent
-import robot.EventSimulator
 import spock.lang.Specification
 
 import java.awt.event.KeyEvent
@@ -13,18 +14,18 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
     JokerComponent component2
     JokerLayer layer
 
-    EventSimulator layerSimulator
-    EventSimulator component1Simulator
-    EventSimulator component2Simulator
+    Simulator layerSimulator
+    Simulator component1Simulator
+    Simulator component2Simulator
 
     def setup(){
         component1 = Spy( JokerComponent )
         component2 = Spy( JokerComponent )
         layer      = Spy( JokerLayer )
 
-        layerSimulator      = new EventSimulator( layer )
-        component1Simulator = new EventSimulator( component1 )
-        component2Simulator = new EventSimulator( component2 )
+        layerSimulator      = Gionic.control( layer )
+        component1Simulator = Gionic.control( component1 )
+        component2Simulator = Gionic.control( component2 )
 
         layer.add( component1 )
         layer.add( component2 )
@@ -39,7 +40,7 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
         given:
             component1.setSelectable( selectable )
         when:
-            component1Simulator.click()
+            component1Simulator.click().atSomeWhere()
         then:
             times * layer.notify( _ as SelectEvent )
 
@@ -54,11 +55,11 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
             component1.setSelectable( true )
             component2.setSelectable( true )
         when:
-            component1Simulator.click()
+            component1Simulator.click().atSomeWhere()
         then:
             1 * component1.select()
         when:
-            component2Simulator.click()
+            component2Simulator.click().atSomeWhere()
         then:
             1 * component1.unselect()
             1 * component2.select()
@@ -69,9 +70,9 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
             component1.setSelectable( true )
             component2.setSelectable( true )
         when:
-            component1Simulator.click()
-            component2Simulator.pressKey( KeyEvent.VK_CONTROL )
-            component2Simulator.click()
+            component1Simulator.click().atSomeWhere()
+            component2Simulator.keyPress().of( KeyEvent.VK_CONTROL )
+            component2Simulator.click().atSomeWhere()
         then:
             1 * component1.select()
             1 * component2.select()
@@ -81,9 +82,9 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
         given:
             component1.setSelectable( true )
         when:
-            component1Simulator.click()
-            component1Simulator.pressKey( KeyEvent.VK_CONTROL )
-            component1Simulator.click()
+            component1Simulator.click().atSomeWhere()
+            component1Simulator.keyPress().of( KeyEvent.VK_CONTROL )
+            component1Simulator.click().atSomeWhere()
         then:
             1 * component1.select()
             1 * component1.unselect()
@@ -94,9 +95,9 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
             component1.setSelectable( true )
             component2.setSelectable( true )
         when:
-            component1Simulator.click()
-            component2Simulator.click()
-            layerSimulator.click()
+            component1Simulator.click().atSomeWhere()
+            component2Simulator.click().atSomeWhere()
+            layerSimulator.click().atSomeWhere()
         then:
             1 * component1.unselect()
             1 * component2.unselect()
@@ -106,7 +107,7 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
         given:
             component1.setSelectable( true )
         when:
-            component1Simulator.click()
+            component1Simulator.click().atSomeWhere()
         then:
             layer.selectedComponents().contains( component1 )
     }

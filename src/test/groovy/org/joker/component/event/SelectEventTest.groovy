@@ -5,12 +5,12 @@ import spock.lang.Specification
 
 import java.awt.event.MouseEvent
 
-class MouseEventTest extends Specification {
+class SelectEventTest extends Specification {
 
     def "set data only by constructor, get data by methods"(){
         given:
-            def component   = new JokerComponent()
-            def mouseEvent  = new MouseEvent( component, 0, 0, 0, 0, 0, 0, false )
+            def component   = Mock( JokerComponent )
+            def mouseEvent  = Mock( MouseEvent )
         when:
             def event = new SelectEvent( component, mouseEvent )
         then:

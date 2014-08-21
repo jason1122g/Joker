@@ -7,57 +7,71 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class SelectRangeListener extends MouseAdapter {
+public class SelectAreaListener extends MouseAdapter {
 
     private SelectGroup selectGroup;
     private Container   container;
-    private Point startPoint;
-    private Point endPoint;
+    private Point       startPoint;
+    private Rectangle   selectArea;
+    private boolean isSelecting;
 
-    private SelectRangeListener( SelectGroup selectGroup ) {
+    private SelectAreaListener( SelectGroup selectGroup ) {
         this.selectGroup = selectGroup;
     }
 
-    public static SelectRangeListener useGroup( SelectGroup selectGroup ) {
-        return new SelectRangeListener( selectGroup );
+    public static SelectAreaListener useGroup( SelectGroup selectGroup ) {
+        return new SelectAreaListener( selectGroup );
     }
 
-    public SelectRangeListener withContainer( Container container ) {
+    public SelectAreaListener withContainer( Container container ) {
         this.container = container;
         return this;
     }
 
+    public boolean isSelecting(){
+        return isSelecting;
+    }
+
+    public Rectangle getSelectArea(){
+        return selectArea;
+    }
+
     @Override
     public void mousePressed( MouseEvent e ) {
-        startPoint = e.getPoint();
+        isSelecting  = true;
+        startPoint  = e.getPoint();
+    }
+
+    @Override
+    public void mouseDragged( MouseEvent e ) {
+        selectArea = convertToRectangle( startPoint, e.getPoint() );
+        container.repaint();
     }
 
     @Override
     public void mouseReleased( MouseEvent e ) {
-        endPoint = e.getPoint();
-        checkControlDown( e );
-        selectAllInRange();
-    }
-
-    private void checkControlDown( MouseEvent e ){
+        isSelecting  = false;
         if( ! e.isControlDown() ){
             selectGroup.unselectAll();
         }
+        if( ! startPoint.equals( e.getPoint() ) ){
+            selectAllInRange();
+        }
+        container.repaint();
     }
 
-    private void selectAllInRange(){
-        Rectangle selectRectangle = convertToRectangle( startPoint, endPoint );
+    private void selectAllInRange() {
         for ( Component component : container.getComponents() ){
             if( component instanceof JokerComponent ){
                 JokerComponent jokerComponent = (JokerComponent) component;
-                if( selectRectangle.contains( convertToRectangle( jokerComponent ) ) ){
+                if( selectArea.contains( convertToRectangle( jokerComponent ) ) ){
                     selectGroup.select( jokerComponent );
                 }
             }
         }
     }
 
-    private Rectangle convertToRectangle( Point p1, Point p2 ){
+    private static Rectangle convertToRectangle( Point p1, Point p2 ) {
         if( p1.y > p2.y ){
             if( p1.x > p2.x ){
                 return new Rectangle( p2, new Dimension( p1.x - p2.x, p1.y - p2.y ) );
@@ -73,7 +87,7 @@ public class SelectRangeListener extends MouseAdapter {
         }
     }
 
-    private Rectangle convertToRectangle( JokerComponent component ){
+    private static Rectangle convertToRectangle( JokerComponent component ) {
         int x = component.getX();
         int y = component.getY();
         int w = component.getWidth();

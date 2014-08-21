@@ -7,15 +7,17 @@ import org.joker.container.abstracts.SelectGroup
 import spock.lang.Specification
 
 import javax.swing.*
+import java.awt.*
 import java.awt.event.KeyEvent
 
-class SelectRangeListenerTest extends Specification {
+class SelectAreaListenerTest extends Specification {
 
     SelectGroup    selectGroup
     JokerComponent component1
     JokerComponent component2
     JComponent     component3
-    Simulator container
+    Simulator      container
+    SelectAreaListener selectAreaListener
 
     def setup(){  "add 3 components to container and use useGroup() and withContainer() to init"
         def containerPanel = new JPanel()
@@ -30,8 +32,9 @@ class SelectRangeListenerTest extends Specification {
         containerPanel.add( component2 )
         containerPanel.add( component3 )
 
-        def rangeListener = SelectRangeListener.useGroup( selectGroup ).withContainer( containerPanel )
-        containerPanel.addMouseListener( rangeListener )
+        selectAreaListener = SelectAreaListener.useGroup( selectGroup ).withContainer( containerPanel )
+        containerPanel.addMouseListener( selectAreaListener )
+        containerPanel.addMouseMotionListener( selectAreaListener )
     }
 
 
@@ -46,7 +49,7 @@ class SelectRangeListenerTest extends Specification {
             2 * selectGroup.select( _ as JokerComponent )
     }
 
-    def "drag range must over the components or it will not be selected"(){
+    def "drag area must over the components or it will not be selected"(){
         given:
             component1.setBounds( 10, 10, 100, 100 )
         when:
@@ -80,6 +83,18 @@ class SelectRangeListenerTest extends Specification {
             4 * selectGroup.select( component1 )
     }
 
+    def "use isSelectingArea() to check the state"(){
+        when:
+            container.drag().from( 10, 10 ).to( 110, 110 )
+        then:
+            selectAreaListener.isSelecting()
+    }
 
+    def "use getSelectArea() get the seleting area"(){
+        when:
+            container.drag().from( 10, 10 ).to( 110, 110 )
+        then:
+            selectAreaListener.getSelectArea() == new Rectangle( 10, 10, 100, 100 )
+    }
 
 }

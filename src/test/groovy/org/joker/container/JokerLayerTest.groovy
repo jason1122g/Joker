@@ -6,6 +6,7 @@ import org.joker.component.JokerComponent
 import org.joker.component.event.SelectEvent
 import spock.lang.Specification
 
+import java.awt.*
 import java.awt.event.KeyEvent
 
 class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
@@ -110,6 +111,20 @@ class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
             component1Simulator.click().atSomeWhere()
         then:
             layer.selectedComponents().contains( component1 )
+    }
+
+    def "use isSelectingArea() to check the state"(){
+        when:
+            layerSimulator.drag().from( 10, 10 ).to( 110, 110 )
+        then:
+            layer.isSelectingArea()
+    }
+
+    def "use getSelectingArea to get the area"(){
+        when:
+            layerSimulator.drag().from( 10, 10 ).to( 110, 110 )
+        then:
+            layer.getSelectingArea() == new Rectangle( 10, 10, 100, 100 )
     }
 
 }

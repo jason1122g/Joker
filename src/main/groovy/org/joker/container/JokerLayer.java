@@ -4,7 +4,7 @@ package org.joker.container;
 import org.joker.JokerObject;
 import org.joker.component.JokerComponent;
 import org.joker.component.event.SelectEvent;
-import org.joker.component.listener.SelectRangeListener;
+import org.joker.component.listener.SelectAreaListener;
 import org.joker.container.abstracts.SelectGroup;
 import org.joker.container.abstracts.SelectObserver;
 import org.joker.container.abstracts.StatusGroup;
@@ -21,6 +21,8 @@ public class JokerLayer extends JokerObject implements SelectObserver {
     private SelectGroup selectGroup        = new SelectedGroup();
     private StatusGroup statusObserveGroup = new StatusObserveGroup();
 
+    private SelectAreaListener selectAreaListener = SelectAreaListener.useGroup( selectGroup ).withContainer( this );
+
     public JokerLayer(){
         this.setLayout( null );
         this.addMouseListener( new MouseAdapter() {
@@ -29,7 +31,8 @@ public class JokerLayer extends JokerObject implements SelectObserver {
                 selectGroup.unselectAll();
             }
         }  );
-        this.addMouseListener( SelectRangeListener.useGroup( selectGroup ).withContainer( this ) );
+        this.addMouseListener( selectAreaListener );
+        this.addMouseMotionListener( selectAreaListener );
     }
 
     @Override
@@ -65,6 +68,14 @@ public class JokerLayer extends JokerObject implements SelectObserver {
             statusObserveGroup.remove( jokerComponent );
         }
         super.remove( component );
+    }
+
+    public boolean isSelectingArea(){
+        return selectAreaListener.isSelecting();
+    }
+
+    public Rectangle getSelectingArea(){
+        return selectAreaListener.getSelectArea();
     }
 
     @Override

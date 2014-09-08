@@ -19,7 +19,7 @@ public class SelectAreaListener extends MouseAdapter {
         this.selectGroup = selectGroup;
     }
 
-    public static SelectAreaListener useGroup( SelectGroup selectGroup ) {
+    public static SelectAreaListener useSelectGroup( SelectGroup selectGroup ) {
         return new SelectAreaListener( selectGroup );
     }
 

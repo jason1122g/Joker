@@ -13,36 +13,44 @@ import java.awt.event.KeyEvent
 class SelectAreaListenerTest extends Specification {
 
     SelectGroup    selectGroup
-    JokerComponent component1
-    JokerComponent component2
-    JComponent     component3
+    JokerComponent component_joker1
+    JokerComponent component_joker2
+    JComponent     component_others
     Simulator      container
     SelectAreaListener selectAreaListener
 
-    def setup(){  "add 3 components to container and use useGroup() and withContainer() to init"
-        def containerPanel = new JPanel()
+    def setup(){  "add 3 components to layer and use useSelectGroup() and withContainer() to init"
+
         selectGroup = Mock( SelectGroup )
-        container   = Gionic.control( containerPanel )
 
-        component1  = new JokerComponent()
-        component2  = new JokerComponent()
-        component3  = new JLabel()
+        def containerPanel = new JPanel()
+        initEventSimulator ( containerPanel )
+        initChildComponents( containerPanel )
+        initListeners      ( containerPanel )
+    }
 
-        containerPanel.add( component1 )
-        containerPanel.add( component2 )
-        containerPanel.add( component3 )
+    private void initEventSimulator( JPanel panel ) {
+        container   = Gionic.control( panel )
+    }
 
-        selectAreaListener = SelectAreaListener.useGroup( selectGroup ).withContainer( containerPanel )
-        containerPanel.addMouseListener( selectAreaListener )
-        containerPanel.addMouseMotionListener( selectAreaListener )
+    private void initChildComponents( JPanel panel ) {
+        panel.add( ( component_joker1  = new JokerComponent() ) )
+        panel.add( ( component_joker2  = new JokerComponent() ) )
+        panel.add( ( component_others  = new JLabel() ) )
+    }
+
+    private void initListeners( JPanel panel ) {
+        selectAreaListener = SelectAreaListener.useSelectGroup( selectGroup ).withContainer( panel )
+        panel.addMouseListener( selectAreaListener )
+        panel.addMouseMotionListener( selectAreaListener )
     }
 
 
     def "use select group to select only jokerComponents in drag range entirely"(){
         given:
-            component1.setBounds( 10, 10, 30, 30 )
-            component2.setBounds( 40, 40, 30, 30 )
-            component3.setBounds( 70, 70, 30, 30 )
+            component_joker1.setBounds( 10, 10, 30, 30 )
+            component_joker2.setBounds( 40, 40, 30, 30 )
+            component_others.setBounds( 70, 70, 30, 30 )
         when:
             container.drag().from( 0, 0 ).to( 120, 120 ).endHere()
         then:
@@ -51,17 +59,17 @@ class SelectAreaListenerTest extends Specification {
 
     def "drag area must over the components or it will not be selected"(){
         given:
-            component1.setBounds( 10, 10, 100, 100 )
+            component_joker1.setBounds( 10, 10, 100, 100 )
         when:
             container.drag().from( 20, 20 ).to( 120, 120 ).endHere()
         then:
-            0 * selectGroup.select( component1 )
+            0 * selectGroup.select( component_joker1 )
     }
 
     def "drag with ctrl pressed will not unselect previous components"(){
         given:
-            component1.setBounds( 10, 10, 30, 30 )
-            component2.setBounds( 100, 100, 30, 30 )
+            component_joker1.setBounds( 10, 10, 30, 30 )
+            component_joker2.setBounds( 100, 100, 30, 30 )
         when:
             container.drag().from( 0, 0 ).to( 50, 50 ).endHere()
         and:
@@ -73,14 +81,14 @@ class SelectAreaListenerTest extends Specification {
 
     def "four ways select are ok"(){
         given:
-            component1.setBounds( 30, 30, 30, 30 )
+            component_joker1.setBounds( 30, 30, 30, 30 )
         when:
             container.drag().from( 10, 10   ).to( 100, 100 ).endHere()
             container.drag().from( 100, 10  ).to( 10, 100  ).endHere()
             container.drag().from( 10, 100  ).to( 100, 10  ).endHere()
             container.drag().from( 100, 100 ).to( 10, 10   ).endHere()
         then:
-            4 * selectGroup.select( component1 )
+            4 * selectGroup.select( component_joker1 )
     }
 
     def "use isSelectingArea() to check the state"(){

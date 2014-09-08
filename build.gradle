@@ -9,6 +9,12 @@ sourceCompatibility = 1.7
 group   = "org.joker"
 version = '1.0.0-SNAPSHOT'
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'org.joker.TestLauncher'
+    }
+}
+
 buildscript {
     repositories {
         mavenCentral()

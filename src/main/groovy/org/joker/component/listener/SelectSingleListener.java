@@ -3,7 +3,7 @@ package org.joker.component.listener;
 import org.joker.component.JokerComponent;
 import org.joker.component.event.SelectEvent;
 import org.joker.container.abstracts.SelectObserver;
-import org.joker.tool.Parent;
+import org.joker.exceptions.IllegalComponentException;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 public class SelectSingleListener extends MouseAdapter{
 
     private JokerComponent component;
+    private SelectObserver selectObserver;
 
     private Point   lastPressPoint;
     private int     dragMinLength = 3;
@@ -23,6 +24,11 @@ public class SelectSingleListener extends MouseAdapter{
 
     public static SelectSingleListener triggerFrom( JokerComponent component ){
         return new SelectSingleListener ( component ) ;
+    }
+
+    public SelectSingleListener toObserver( SelectObserver selectObserver ){
+        this.selectObserver = selectObserver;
+        return this;
     }
 
     @Override
@@ -46,13 +52,17 @@ public class SelectSingleListener extends MouseAdapter{
     @Override
     public void mouseReleased( MouseEvent e ) {
         if( lastPressPoint != null && !isDragged ){
-            tryNotifyParent(e);
+            tryNotifyObserver( e );
         }
     }
 
-    private void tryNotifyParent( MouseEvent e ){
+    private void tryNotifyObserver( MouseEvent e ){
+        if( selectObserver == null ) {
+            throw new IllegalComponentException( "SelectObserver is neccessary" );
+        }
+
         if( lengthOf( e.getPoint(), lastPressPoint ) < dragMinLength ){
-            Parent.of( component ).as( SelectObserver.class ).notify( new SelectEvent( component, e ) );
+            selectObserver.notify( new SelectEvent( component, e ) );
         }
     }
 

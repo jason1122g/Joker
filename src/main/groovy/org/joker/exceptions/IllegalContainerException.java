@@ -1,7 +1,7 @@
 package org.joker.exceptions;
 
 
-public class IllegalContainerException extends RuntimeException {
+public class IllegalContainerException extends IllegalComponentException {
 
     public IllegalContainerException( String msg ){
         super( msg );

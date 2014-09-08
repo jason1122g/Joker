@@ -3,84 +3,61 @@ package org.joker.container;
 
 import org.joker.JokerObject;
 import org.joker.component.JokerComponent;
-import org.joker.component.event.SelectEvent;
-import org.joker.component.listener.SelectAreaListener;
-import org.joker.container.abstracts.SelectGroup;
-import org.joker.container.abstracts.SelectObserver;
-import org.joker.container.abstracts.StatusGroup;
-import org.joker.container.group.SelectedGroup;
-import org.joker.container.group.StatusObserveGroup;
+import org.joker.container.abstracts.ComponentHandler;
 
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.HashSet;
 import java.util.Set;
 
-public class JokerLayer extends JokerObject implements SelectObserver {
+public class JokerLayer extends JokerObject {
 
-    private SelectGroup selectGroup        = new SelectedGroup();
-    private StatusGroup statusObserveGroup = new StatusObserveGroup();
 
-    private SelectAreaListener selectAreaListener = SelectAreaListener.useGroup( selectGroup ).withContainer( this );
+    private ComponentHandler componentHandler;
 
     public JokerLayer(){
         this.setLayout( null );
-        this.addMouseListener( new MouseAdapter() {
-            @Override
-            public void mouseClicked( MouseEvent e ) {
-                selectGroup.unselectAll();
-            }
-        }  );
-        this.addMouseListener( selectAreaListener );
-        this.addMouseMotionListener( selectAreaListener );
     }
 
     @Override
-    public void notify( SelectEvent selectEvent ) {
-        MouseEvent     mouseEvent      = selectEvent.getMouseEvent();
-        JokerComponent componentSource = selectEvent.getSource();
-        if( mouseEvent.isControlDown() ){
-            if( componentSource.isSelected() ){
-                selectGroup.unselect( componentSource );
-            }else{
-                selectGroup.select  ( componentSource );
-            }
-        }else{
-            selectGroup.unselectAll();
-            selectGroup.select( componentSource );
-        }
-        repaint();
-    }
-
-    @Override
-    public Component add( Component component ){
-        if( component instanceof JokerComponent ){
-            statusObserveGroup.add( (JokerComponent) component );
+    public Component add( Component component ) {
+        if( component instanceof JokerComponent && componentHandler != null ) {
+            componentHandler.mount( (JokerComponent) component );
         }
         return super.add( component );
     }
 
     @Override
-    public void remove( Component component ){
-        if( component instanceof JokerComponent ){
-            JokerComponent jokerComponent = (JokerComponent) component;
-            selectGroup.unselect     ( jokerComponent );
-            statusObserveGroup.remove( jokerComponent );
+    public void remove( Component component ) {
+        if( component instanceof JokerComponent && componentHandler != null ) {
+            componentHandler.unmount( (JokerComponent) component );
         }
         super.remove( component );
     }
 
-    public boolean isSelectingArea(){
-        return selectAreaListener.isSelecting();
+    public void setComponentHandler( ComponentHandler componentHandler ) {
+        if( componentHandler == null ) {
+            throw new IllegalArgumentException( "componentHandler cannot be null" );
+        }
+        if( this.componentHandler != null ) {
+            this.componentHandler.destruct( this );
+        }
+        this.componentHandler = componentHandler;
+        this.componentHandler.construct( this );
     }
 
-    public Rectangle getSelectingArea(){
-        return selectAreaListener.getSelectArea();
+    public ComponentHandler getComponentHandler() {
+        return componentHandler;
     }
 
-    @Override
-    public Set<JokerComponent> selectedComponents() {
-        return selectGroup.components();
+    public Set< JokerComponent > components() {
+        Component[] components = this.getComponents();
+        Set<JokerComponent> jokerComponents = new HashSet<>();
+        for( Component component : components ) {
+            if( component instanceof JokerComponent ){
+                jokerComponents.add( (JokerComponent) component );
+            }
+        }
+        return jokerComponents;
     }
 
 }

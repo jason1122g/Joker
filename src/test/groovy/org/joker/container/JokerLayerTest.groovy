@@ -1,130 +1,90 @@
 package org.joker.container
 
-import org.jason1122g.gionic.awt.simulator.Gionic
-import org.jason1122g.gionic.core.Simulator
 import org.joker.component.JokerComponent
-import org.joker.component.event.SelectEvent
+import org.joker.container.abstracts.ComponentHandler
 import spock.lang.Specification
 
-import java.awt.*
-import java.awt.event.KeyEvent
+class JokerLayerTest extends Specification {
 
-class JokerLayerTest extends Specification { //TODO MULTI DRAG TEST
-
-    JokerComponent component1
-    JokerComponent component2
     JokerLayer layer
 
-    Simulator layerSimulator
-    Simulator component1Simulator
-    Simulator component2Simulator
-
     def setup(){
-        component1 = Spy( JokerComponent )
-        component2 = Spy( JokerComponent )
-        layer      = Spy( JokerLayer )
-
-        layerSimulator      = Gionic.control( layer )
-        component1Simulator = Gionic.control( component1 )
-        component2Simulator = Gionic.control( component2 )
-
-        layer.add( component1 )
-        layer.add( component2 )
+        layer = new JokerLayer()
     }
 
-    def "default layout manager is null"(){
+    def "default layout manager is null"() {
         expect:
             layer.getLayout() == null
     }
 
-    def "click on its selectable component will trigger notify()"(){
+    def "setComponentHandler() will construct the handler"() {
         given:
-            component1.setSelectable( selectable )
+            def handler = Mock( ComponentHandler )
         when:
-            component1Simulator.click().atSomeWhere()
+            layer.setComponentHandler( handler )
         then:
-            times * layer.notify( _ as SelectEvent )
-
-        where:
-            selectable | times
-            true       | 1
-            false      | 0
+            1 * handler.construct( layer )
     }
 
-    def "click on another component will make the previous one unselected"(){
+    def "handler of setComponentHandler() can be get from getComponentHandler()"() {
         given:
-            component1.setSelectable( true )
-            component2.setSelectable( true )
+            def handler = Mock( ComponentHandler )
         when:
-            component1Simulator.click().atSomeWhere()
+            layer.setComponentHandler( handler )
         then:
-            1 * component1.select()
-        when:
-            component2Simulator.click().atSomeWhere()
-        then:
-            1 * component1.unselect()
-            1 * component2.select()
+            layer.getComponentHandler() == handler
     }
 
-    def "click on its components with ctrl can apply multi-select"(){
+    def "throw Exception when call setComponentHandler() with null"() {
+        when:
+            layer.setComponentHandler( null )
+        then:
+            thrown( IllegalArgumentException )
+    }
+
+    def "setComponentHandler() will destruct() previous handler"() {
         given:
-            component1.setSelectable( true )
-            component2.setSelectable( true )
+            def previousHandler = Mock( ComponentHandler )
+            def currentHandler  = Mock( ComponentHandler )
         when:
-            component1Simulator.click().atSomeWhere()
-            component2Simulator.keyPress().of( KeyEvent.VK_CONTROL )
-            component2Simulator.click().atSomeWhere()
+            layer.setComponentHandler( previousHandler )
+        and:
+            layer.setComponentHandler( currentHandler )
         then:
-            1 * component1.select()
-            1 * component2.select()
+            1 * previousHandler.destruct( layer )
     }
 
-    def "click with ctrl on selected component can unselect it"(){
+    def "add( Component ) will mount component if instance of JokerComponnet and handler is not null"() {
         given:
-            component1.setSelectable( true )
+            def handler   = Mock( ComponentHandler )
+            def component = new JokerComponent()
+        and:
+            layer.setComponentHandler( handler )
         when:
-            component1Simulator.click().atSomeWhere()
-            component1Simulator.keyPress().of( KeyEvent.VK_CONTROL )
-            component1Simulator.click().atSomeWhere()
+            layer.add( component )
         then:
-            1 * component1.select()
-            1 * component1.unselect()
+            1 * handler.mount( component )
     }
 
-    def "click on layer itself will unselect all selected components"(){
+    def "remove( Component ) will unmount component if instance of JokerComponnet and handler is not null"() {
         given:
-            component1.setSelectable( true )
-            component2.setSelectable( true )
+            def handler   = Mock( ComponentHandler )
+            def component = Mock( JokerComponent )
+        and:
+            layer.setComponentHandler( handler )
         when:
-            component1Simulator.click().atSomeWhere()
-            component2Simulator.click().atSomeWhere()
-            layerSimulator.click().atSomeWhere()
+            layer.remove( component )
         then:
-            1 * component1.unselect()
-            1 * component2.unselect()
+            1 * handler.unmount( component )
     }
 
-    def "use selectedComponentes() to get all selected components"(){
+    def "components() will return the set of added JokerComponents"() {
         given:
-            component1.setSelectable( true )
-        when:
-            component1Simulator.click().atSomeWhere()
-        then:
-            layer.selectedComponents().contains( component1 )
-    }
-
-    def "use isSelectingArea() to check the state"(){
-        when:
-            layerSimulator.drag().from( 10, 10 ).to( 110, 110 )
-        then:
-            layer.isSelectingArea()
-    }
-
-    def "use getSelectingArea to get the area"(){
-        when:
-            layerSimulator.drag().from( 10, 10 ).to( 110, 110 )
-        then:
-            layer.getSelectingArea() == new Rectangle( 10, 10, 100, 100 )
+            def component = new JokerComponent()
+        and:
+            layer.add( component )
+        expect:
+            layer.components().contains( component )
     }
 
 }

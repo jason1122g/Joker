@@ -1,41 +1,53 @@
 package org.joker.component.listener
 
 import org.jason1122g.gionic.awt.simulator.Gionic
+import org.jason1122g.gionic.core.Simulator
 import org.joker.component.JokerComponent
-import org.joker.exceptions.IllegalContainerException
+import org.joker.component.event.SelectEvent
+import org.joker.container.abstracts.SelectObserver
 import spock.lang.Specification
 
-import javax.swing.*
-import java.awt.event.MouseListener
+import java.awt.event.MouseAdapter
 
-class SelectSingleListenerTest extends Specification {
+class SelectSingleListenerTest extends Specification{
 
-    def "throws exception when clicked if component parent is not observer"(){
-        given:
-            def component = Mock( JokerComponent ){
-                getParent() >> new JPanel()
-            }
-        when:
-            Gionic.control( SelectSingleListener.triggerFrom( component ) as MouseListener ).click().atSomeWhere()
-        then:
-            thrown( IllegalContainerException )
+    SelectObserver observer
+    Simulator listener
+
+    def setup(){ "use triggerFrom() and toObserver() to init and specify the event source"
+        this.observer = Mock( SelectObserver )
+        def listener  = SelectSingleListener.triggerFrom( Mock( JokerComponent ) ).toObserver( observer )
+        this.listener = Gionic.control( listener as MouseAdapter )
     }
 
-    def "throws exception when clicked if no parent exist"(){
-        given:
-            def component = Mock( JokerComponent )
+    def "click on listener component will lead to call notify() of its parent"(){
         when:
-            Gionic.control( SelectSingleListener.triggerFrom( component ) as MouseListener ).click().atSomeWhere()
+            listener.click().atSomeWhere()
         then:
-            thrown( IllegalContainerException )
+            1 * observer.notify( _ as SelectEvent)
     }
 
-    def "not thrown exception even wrong container before event trigger"(){
-        given:
-            def component = Mock ( JokerComponent )
+    def "mouse drag in 3px will notify its parent"(){
         when:
-            SelectSingleListener.triggerFrom( component )
+            listener.drag().from( 1, 0 ).to( 3, 0 ).endHere()
         then:
-            notThrown( IllegalContainerException )
+            1 * observer.notify( _ as SelectEvent)
     }
+
+    def "mouse drag over 3px will not notify its parent"(){
+        when:
+            listener.drag().from( 1, 0 ).to( 9, 0 ).endHere()
+        then:
+            0 * observer.notify( _ as SelectEvent)
+    }
+
+    def "mouse press, exit then release will not notify its parent"(){
+        when:
+            listener.press().at( 1, 0 )
+            listener.exit().atSomeWhere()
+            listener.release().at( 3, 0 )
+        then:
+            0 * observer.notify( _ as SelectEvent)
+    }
+
 }
